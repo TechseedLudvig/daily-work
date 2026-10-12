@@ -23,7 +23,7 @@ Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" list`, print its output, and
 
 1. Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" begin <task folder>`. On a line
    starting "refused:", print it and stop. Otherwise it names task.md, sources.md and the
-   files in outputs/.
+   files in outputs/, and may end with the line `rating: ask`.
 2. Read task.md, the area's sources.md, and every file listed under outputs. Use the
    conversation for what was done and why.
 3. Edit task.md, replacing only the body under `## Result` and under `## Caveats`:
@@ -35,14 +35,18 @@ Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" list`, print its output, and
 4. For each source the task used (a file, system, report or person) that is not already in
    sources.md, add one bullet in its format: `- <source>: <what it is, where it lives, what it
    is authoritative for>.` Change no existing bullet.
-5. Run, with one line (under 80 characters) saying what the task produced:
+5. Only if begin printed `rating: ask`, ask: "Was this useful? Reply 1 to 5, or anything
+   else to skip." Wait for the answer. A reply of 1, 2, 3, 4 or 5 is the rating; anything
+   else means no rating. Ask once and do not comment on the answer.
+6. Run, with one line (under 80 characters) saying what the task produced, and with the
+   rating, if there is one, as a last argument after the task folder:
    ```
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" finish <task folder> <<'DAILY_WORK_LINE'
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" finish <task folder> [rating] <<'DAILY_WORK_LINE'
    <one line>
    DAILY_WORK_LINE
    ```
    It refuses if `## Ask` or `## Spec` changed or a placeholder remains; fix your edit and
    rerun finish. Otherwise it marks the README line done, commits "daily-work: record
    <task-name>", and prints the Done lines.
-6. End on the script's output: the Done lines left for a person to check. If they still read
+7. End on the script's output: the Done lines left for a person to check. If they still read
    `<a check a person can confirm in under a minute>`, say the Spec has no Done lines yet.

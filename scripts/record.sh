@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # record.sh list             tasks whose area README line says "open"
 # record.sh begin <task>     check the task, snapshot Ask and Spec, list what to read
-# record.sh finish <task>    one-line summary on stdin; verify Ask and Spec unchanged,
-#                            mark the README line done, commit, print the Done lines
+# record.sh finish <task> [rating]    one-line summary on stdin; verify Ask and Spec
+#                            unchanged, mark the README line done, commit, print the Done
+#                            lines. The optional 1 to 5 rating goes into the usage event.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
@@ -20,7 +21,7 @@ if [ "${1:-}" = list ]; then
 fi
 
 MODE=${1:-}; T=${2:-}
-[[ $MODE == begin || $MODE == finish ]] || refuse "usage: record.sh list | begin <task> | finish <task>"
+[[ $MODE == begin || $MODE == finish ]] || refuse "usage: record.sh list | begin <task> | finish <task> [rating]"
 T=${T%/}; T=${T#"$PWD/"}; T=${T#./}
 [[ $T =~ ^areas/([^/]+)/tasks/([a-z0-9-]+)$ ]] || refuse "'$T' is not areas/<area>/tasks/<task-name>"
 AREA=${BASH_REMATCH[1]} SLUG=${BASH_REMATCH[2]}
@@ -37,6 +38,7 @@ if [ "$MODE" = begin ]; then
   echo "sources: $A/sources.md"
   out=$(find "$T/outputs" -type f ! -name .gitkeep 2>/dev/null | sort)
   if [ -n "$out" ]; then echo "outputs:"; sed 's/^/  /' <<< "$out"; else echo "outputs: none"; fi
+  telemetry status
   exit 0
 fi
 
@@ -63,6 +65,7 @@ for p in "$A/sources.md" README.md tools; do [ -e "$p" ] && paths+=("$p"); done
 git add -- "${paths[@]}"
 git commit -q -m "daily-work: record $SLUG" -- "${paths[@]}" || refuse "git commit failed; README line updated but nothing committed"
 rm -f "$SNAP"
+telemetry event record "$PWD/$T" "${3:-}"
 
 echo "committed: $(git rev-parse --short HEAD) daily-work: record $SLUG"
 echo "$A/README.md: $LINE"

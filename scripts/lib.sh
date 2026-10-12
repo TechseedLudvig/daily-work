@@ -5,6 +5,9 @@ SLUG_RE='^[a-z0-9-]+$'
 
 refuse() { echo "refused: $*"; exit 1; }
 
+# Usage telemetry (README "Telemetry"). Never fails and never waits for the network.
+telemetry() { python3 "$(dirname "${BASH_SOURCE[0]}")/telemetry.py" "$@" 2>/dev/null || true; }
+
 # Copy template $1 to $2, filling <area>, <slug>, <date>, <title> from env,
 # and replacing the <description> placeholder line with env ASK.
 fill() {

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # brief.sh <area> <task-name>, with stdin: the title on line 1, then the description.
 # Creates the area if new, then the task folder areas/<area>/tasks/<task-name>/ with brief.md,
-# inputs/ and outputs/, and indexes it in the area README.
+# inputs/, outputs/ and .task-id, and indexes it in the area README.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
@@ -31,7 +31,10 @@ grep -qE "^- $AREA(:|\$)" README.md 2>/dev/null || add_under README.md "## Areas
 
 mkdir -p "$T/inputs" "$T/outputs"
 : > "$T/inputs/.gitkeep"; : > "$T/outputs/.gitkeep"
+# A random id for usage telemetry (README "Telemetry"); says nothing about the task.
+python3 -c 'import uuid; print(uuid.uuid4())' > "$T/.task-id" 2>/dev/null || rm -f "$T/.task-id"
 fill "$TEMPLATES/brief/brief.md" "$F"
 add_under "$A/README.md" "## Tasks" "- $DATE $SLUG: open"
+telemetry event brief "$PWD/$T"
 echo "Created $F"
 echo "Next: /mattpocock-skills:grill-with-docs $F"

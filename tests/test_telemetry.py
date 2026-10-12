@@ -1,0 +1,211 @@
+import io
+import json
+import os
+import re
+import sys
+import tempfile
+import unittest
+import uuid
+from contextlib import redirect_stdout
+from pathlib import Path
+from unittest import mock
+
+REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO / "scripts"))
+import telemetry
+
+MIGRATION = (REPO / "supabase" / "migrations" / "20261012000000_telemetry.sql").read_text()
+TASK_ID = "0b9f6a3e-58c1-4a41-9d0c-0d2f3f6f7a11"
+
+
+def granted(table):
+    """The columns the migration lets the anon key insert into a table."""
+    columns = re.search(rf"grant insert \(([^)]*)\)\s+on public\.{table} to anon;", MIGRATION).group(1)
+    return {c.strip() for c in columns.split(",")}
+
+
+class TelemetryCase(unittest.TestCase):
+    def setUp(self):
+        tmp = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        self.home = tmp / "config"
+        self.task = tmp / "repo" / "areas" / "acme" / "tasks" / "q3-numbers"
+        self.task.mkdir(parents=True)
+        (self.task / ".task-id").write_text(TASK_ID + "\n")
+        self.sent = []
+        self.enterContext(mock.patch.object(telemetry, "HOME", self.home))
+        self.enterContext(mock.patch.object(telemetry, "config", lambda: ("https://x.supabase.co", "anon-key")))
+        self.enterContext(mock.patch.object(telemetry, "send", lambda table, payload: self.sent.append((table, payload))))
+        self.enterContext(mock.patch.dict(os.environ))
+        os.environ.pop("DAILY_WORK_TELEMETRY", None)
+
+    def emit(self, *args):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            telemetry.emit(*args)
+        return out.getvalue()
+
+
+class InstallId(TelemetryCase):
+    def test_is_a_random_uuid_made_once_and_stored(self):
+        first = telemetry.install_id()
+        self.assertEqual(uuid.UUID(first).version, 4)
+        self.assertEqual(first, telemetry.install_id())
+        self.assertEqual((self.home / "install-id").read_text().strip(), first)
+
+    def test_deleting_the_file_resets_it(self):
+        first = telemetry.install_id()
+        (self.home / "install-id").unlink()
+        self.assertNotEqual(first, telemetry.install_id())
+
+    def test_a_damaged_file_is_replaced(self):
+        self.home.mkdir()
+        (self.home / "install-id").write_text("not a uuid")
+        self.assertEqual(uuid.UUID(telemetry.install_id()).version, 4)
+
+    def test_nothing_about_the_person_or_machine_goes_into_it(self):
+        source = (REPO / "scripts" / "telemetry.py").read_text()
+        for word in ("hashlib", "hmac", "salt", "user.email", "getpass", "gethostname", "uuid1", "getnode", "platform"):
+            self.assertNotIn(word, source)
+
+
+class TaskId(TelemetryCase):
+    def test_is_read_from_the_task_folder(self):
+        self.assertEqual(telemetry.task_id(self.task), TASK_ID)
+
+    def test_missing_or_damaged_file_means_no_task_id(self):
+        (self.task / ".task-id").write_text("areas/acme/tasks/q3-numbers")
+        self.assertIsNone(telemetry.task_id(self.task))
+        (self.task / ".task-id").unlink()
+        self.assertIsNone(telemetry.task_id(self.task))
+        self.assertNotIn("task_id", telemetry.common(self.task))
+
+    def test_an_old_task_still_sends_its_record_event_without_a_task_id(self):
+        (self.task / ".task-id").unlink()
+        self.emit("record", self.task)  # first run: the notice
+        self.emit("record", self.task, {"rating": 2})
+        self.assertEqual(set(self.sent[0][1]), {"event", "ts", "plugin_version", "install_id", "rating"})
+
+
+class SupabasePayloads(TelemetryCase):
+    def events(self):
+        self.emit("brief", self.task)  # first run: the notice
+        self.emit("brief", self.task)
+        self.emit("record", self.task, {"rating": 4})
+        with redirect_stdout(io.StringIO()):
+            hook = {"cwd": "/", "tool_input": {"file_path": str(self.task / "task.md")}}
+            (self.task / "brief.md").write_text("x")
+            with mock.patch.object(sys, "stdin", io.StringIO(json.dumps(hook))):
+                telemetry.main(["telemetry.py", "hook"])
+        return self.sent
+
+    def test_each_event_goes_to_the_events_table_with_exactly_its_fields(self):
+        base = {"event", "ts", "plugin_version", "install_id", "task_id"}
+        (t1, brief), (t2, record), (t3, grill) = self.events()
+        self.assertEqual({t1, t2, t3}, {"events"})
+        self.assertEqual(set(brief), base)
+        self.assertEqual(set(record), base | {"rating"})
+        self.assertEqual(set(grill), base | {"outcome"})
+        self.assertEqual((brief["event"], record["rating"], grill["outcome"]), ("brief", 4, "completed"))
+
+    def test_values_fit_the_migration(self):
+        for _, payload in self.events():
+            self.assertLessEqual(set(payload), granted("events"))
+            self.assertEqual(payload["task_id"], TASK_ID)
+            self.assertEqual(payload["install_id"], telemetry.install_id())
+            self.assertRegex(payload["ts"], r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$")
+            self.assertRegex(payload["plugin_version"], r"^\d+\.\d+\.\d+$")
+
+    def test_no_path_or_name_is_in_any_payload(self):
+        text = json.dumps(self.events())
+        for clear in ("acme", "q3-numbers", "areas", str(self.task.parent.parent.parent.parent)):
+            self.assertNotIn(clear, text)
+
+    def test_request_is_an_insert_with_the_anon_key(self):
+        r = telemetry.request("events", b"{}")
+        self.assertEqual(r.full_url, "https://x.supabase.co/rest/v1/events")
+        self.assertEqual(r.get_method(), "POST")
+        self.assertEqual(r.get_header("Apikey"), "anon-key")
+        self.assertEqual(r.get_header("Prefer"), "return=minimal")
+        self.assertEqual(r.get_header("Content-type"), "application/json")
+
+    def test_rating_accepts_only_1_to_5(self):
+        self.assertEqual(telemetry.rating("5"), {"rating": 5})
+        for text in ("", "0", "6", "yes", "3.5", " 3"):
+            self.assertEqual(telemetry.rating(text), {})
+
+    def test_feedback_payload_has_exactly_the_feedback_columns(self):
+        import feedback
+        (self.task / "task.md").write_text("# Task\n")
+        with redirect_stdout(io.StringIO()) as out:
+            feedback.preview(str(self.task), "grill asked too much")
+        payload = json.loads((self.home / "feedback-pending.json").read_text())
+        self.assertEqual(set(payload), granted("feedback"))
+        self.assertEqual((payload["comment"], payload["content"]), ("grill asked too much", "# Task\n"))
+        self.assertIn((self.home / "feedback-pending.json").read_text(), out.getvalue())
+        self.assertEqual(self.sent, [])
+
+
+class Migration(unittest.TestCase):
+    def test_anon_can_only_insert(self):
+        self.assertIn("revoke all on public.events, public.feedback from anon, authenticated;", MIGRATION)
+        self.assertEqual(MIGRATION.count("enable row level security"), 2)
+        self.assertEqual(re.findall(r"for (\w+) to anon", MIGRATION), ["insert", "insert"])
+        self.assertEqual(re.findall(r"grant (\w+)", MIGRATION), ["insert", "insert"])
+
+    def test_events_and_feedback_are_separate_tables(self):
+        self.assertEqual(granted("events"), {"event", "ts", "plugin_version", "install_id", "task_id", "outcome", "rating"})
+        self.assertEqual(granted("feedback"), {"ts", "plugin_version", "install_id", "task_id", "comment", "content"})
+
+
+class OptOut(TelemetryCase):
+    def test_opted_out_sends_nothing_shows_nothing_and_writes_nothing(self):
+        os.environ["DAILY_WORK_TELEMETRY"] = "0"
+        self.assertEqual(self.emit("brief", self.task), "")
+        self.assertEqual(self.sent, [])
+        self.assertFalse(self.home.exists())
+        self.assertFalse(telemetry.ready())
+
+    def test_empty_telemetry_json_sends_nothing(self):
+        with mock.patch.object(telemetry, "config", lambda: None):
+            self.assertEqual(self.emit("brief", self.task), "")
+            self.assertFalse(telemetry.ready())
+        self.assertEqual(self.sent, [])
+        self.assertFalse(self.home.exists())
+
+    def test_telemetry_json_holds_only_the_url_and_the_public_key(self):
+        c = json.loads((REPO / "telemetry.json").read_text())
+        self.assertEqual(set(c), {"url", "anon_key"})
+        self.assertNotIn("secret", c["anon_key"])
+
+    def test_first_run_shows_the_notice_and_sends_nothing(self):
+        shown = self.emit("brief", self.task)
+        self.assertIn("DAILY_WORK_TELEMETRY=0", shown)
+        self.assertEqual(self.sent, [])
+
+    def test_second_run_sends_without_a_notice(self):
+        self.emit("brief", self.task)
+        self.assertTrue(telemetry.ready())
+        self.assertEqual(self.emit("brief", self.task), "")
+        self.assertEqual([p["event"] for _, p in self.sent], ["brief"])
+
+
+class GrillHook(TelemetryCase):
+    def hook(self, name):
+        return {"cwd": str(self.task.parent), "tool_input": {"file_path": str(self.task / name)}}
+
+    def test_task_md_written_beside_a_brief_is_a_finished_grilling(self):
+        (self.task / "brief.md").write_text("x")
+        self.assertEqual(telemetry.grilled_task(self.hook("task.md")), str(self.task))
+
+    def test_task_md_without_a_brief_is_not(self):
+        self.assertIsNone(telemetry.grilled_task(self.hook("task.md")))
+
+    def test_other_files_are_not(self):
+        (self.task / "brief.md").write_text("x")
+        self.assertIsNone(telemetry.grilled_task(self.hook("outputs/task.md")))
+        self.assertIsNone(telemetry.grilled_task(self.hook("notes.md")))
+        self.assertIsNone(telemetry.grilled_task({}))
+
+
+if __name__ == "__main__":
+    unittest.main()
