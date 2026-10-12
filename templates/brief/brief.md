@@ -1,6 +1,7 @@
 # <title>
 
-Area: <area>
+Project: <project>
 Written: <date>
+Id: <id>
 
 <description>

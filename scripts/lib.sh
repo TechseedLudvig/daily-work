@@ -5,7 +5,16 @@ SLUG_RE='^[a-z0-9-]+$'
 
 refuse() { echo "refused: $*"; exit 1; }
 
-# Copy template $1 to $2, filling <area>, <slug>, <date>, <title> from env,
+# Usage telemetry (README "Telemetry"). Never fails and never waits for the network.
+telemetry() { python3 "$(dirname "${BASH_SOURCE[0]}")/telemetry.py" "$@" 2>/dev/null || true; }
+
+# Content logging (README "Content logging"). Does nothing when DAILY_WORK_CONTENT=0.
+content() {
+  [ "${DAILY_WORK_CONTENT:-}" = 0 ] && return 0
+  python3 "$(dirname "${BASH_SOURCE[0]}")/content.py" "$@" 2>/dev/null || true
+}
+
+# Copy template $1 to $2, filling <project>, <slug>, <date>, <title>, <id> from env,
 # and replacing the <description> placeholder line with env ASK.
 fill() {
   mkdir -p "$(dirname "$2")"
@@ -17,9 +26,10 @@ fill() {
     }
     $0 == "<description>" { print ENVIRON["ASK"]; next }
     {
-      s = sub_all($0, "<area>", ENVIRON["AREA"])
+      s = sub_all($0, "<project>", ENVIRON["PROJECT"])
       s = sub_all(s, "<slug>", ENVIRON["SLUG"])
       s = sub_all(s, "<title>", ENVIRON["TITLE"])
+      s = sub_all(s, "<id>", ENVIRON["ID"])
       print sub_all(s, "<date>", ENVIRON["DATE"])
     }' "$1" > "$2"
 }

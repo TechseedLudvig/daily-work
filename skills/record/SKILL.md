@@ -1,34 +1,45 @@
 ---
 name: record
 description: >-
-  /daily-work:record [areas/<area>/tasks/<task-name>]. Record a finished task: write
-  ## Result and ## Caveats in its task.md from outputs/ and the conversation, add missing
-  sources to the area's sources.md, mark the area README line done, commit, and list the Done
-  lines a person still has to check. With no argument, list open tasks and stop.
+  /daily-work:record [task-name]. Record a finished task: write
+  ## Result and ## Caveats in its task file from the project's outputs/ and the conversation,
+  add missing sources to the project's sources.md, mark the project README line done, commit,
+  and list the Done lines a person still has to check. With no argument, record the only open
+  task, or list the open tasks.
 disable-model-invocation: true
-argument-hint: "[areas/<area>/tasks/<task-name>]"
+argument-hint: "[task-name]"
 ---
 
 # Record
 
 Arguments: `$ARGUMENTS`
 
+Ask the person nothing; record runs without questions.
+
 Never open or print .env. Never create CONTEXT.md or GLOSSARY.md. Never edit `## Ask` or `## Spec`.
 
 ## No argument
 
-Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" list`, print its output, and stop.
+Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" list`. If it prints exactly one line and
+that line is a path under `tasks/`, that is the task: continue below with it. Otherwise print
+its output and stop.
 
-## With a task folder
+## With a task
 
-1. Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" begin <task folder>`. On a line
-   starting "refused:", print it and stop. Otherwise it names task.md, sources.md and the
-   files in outputs/.
-2. Read task.md, the area's sources.md, and every file listed under outputs. Use the
+The task is a task name (`pitch-deck`) or a task file (`hackathon/tasks/pitch-deck.md`); pass
+it to the script as given. `begin` prints the task file on its `task:` line.
+
+1. Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" begin <task>`. On a line
+   starting "refused:", print it and stop. Otherwise it names the task file, sources.md and
+   the files in the project's outputs/ changed since the last commit.
+2. Read the task file, the project's sources.md, and every file listed under outputs. The
+   project's outputs/ is shared by all its tasks: the listed files are the ones this task
+   made or changed. If none are listed, take the files from the conversation. Use the
    conversation for what was done and why.
-3. Edit task.md, replacing only the body under `## Result` and under `## Caveats`:
-   - Result: what was produced and where (paths under outputs/), and the answer itself: the
-     numbers, findings or recommendation, each tied to its source, slide or line.
+3. Edit the task file, replacing only the body under `## Result` and under `## Caveats`:
+   - Result: what was produced or changed and where (paths under outputs/; for a file that
+     already existed, what changed in it), and the answer itself: the numbers, findings or
+     recommendation, each tied to its source, slide or line.
    - Caveats: what was assumed, what could not be checked, which figures do not reconcile,
      which sources were missing or stale. Write "None." only if that is true.
    Only state what outputs/ or the conversation shows.
@@ -37,7 +48,7 @@ Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" list`, print its output, and
    is authoritative for>.` Change no existing bullet.
 5. Run, with one line (under 80 characters) saying what the task produced:
    ```
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" finish <task folder> <<'DAILY_WORK_LINE'
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" finish <task> <<'DAILY_WORK_LINE'
    <one line>
    DAILY_WORK_LINE
    ```

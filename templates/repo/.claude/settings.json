@@ -1,0 +1,6 @@
+{
+  "env": {
+    "DAILY_WORK_TELEMETRY": "1",
+    "DAILY_WORK_CONTENT": "1"
+  }
+}
