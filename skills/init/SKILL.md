@@ -1,9 +1,9 @@
 ---
 name: init
 description: >-
-  /daily-work:init [dir]. Set up a daily-work repo: CLAUDE.md, README.md, .gitignore,
+  /daily-work:init [dir]. Set up a daily-work repo: AGENTS.md, CLAUDE.md, README.md, .gitignore,
   .env.example, pyproject.toml, .claude/settings.json, tools/, and git init if needed. Never overwrites; an
-  existing CLAUDE.md gets only missing ## sections, an existing .gitignore only missing lines.
+  existing AGENTS.md gets only missing ## sections, an existing .gitignore or CLAUDE.md only missing lines.
   The session runs one script and edits nothing.
 disable-model-invocation: true
 argument-hint: "[dir]"
@@ -11,10 +11,14 @@ argument-hint: "[dir]"
 
 # Init
 
-Run this one Bash command from the repo root, arguments as given (usually none):
+`<plugin>` in the commands below is the daily-work plugin folder: the folder two levels above
+the one this SKILL.md is in. Write it as an absolute path. Run this skill only when the person
+asks for it by name.
+
+Run this one command from the repo root, with the arguments the person gave (usually none):
 
 ```
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/init.sh" $ARGUMENTS
+bash "<plugin>/scripts/init.sh" $ARGUMENTS
 ```
 
 Print its output exactly as printed, one line per file, and end the turn on its last line.

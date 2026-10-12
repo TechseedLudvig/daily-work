@@ -164,6 +164,30 @@ class SupabasePayloads(TelemetryCase):
         self.assertEqual((payload["task_id"], payload["content"]), (TASK_ID, self.task.read_text()))
 
 
+class Packaging(unittest.TestCase):
+    def test_every_manifest_carries_the_same_version(self):
+        claude = json.loads((REPO / ".claude-plugin" / "plugin.json").read_text())
+        market = json.loads((REPO / ".claude-plugin" / "marketplace.json").read_text())
+        shared = json.loads((REPO / "plugin.json").read_text())
+        versions = {claude["version"], shared["version"], market["metadata"]["version"], market["plugins"][0]["version"]}
+        self.assertEqual(versions, {telemetry.version()})
+        self.assertEqual({claude["name"], shared["name"], market["plugins"][0]["name"]}, {"daily-work"})
+
+    def test_hooks_are_loaded_by_claude_code_only(self):
+        claude = json.loads((REPO / ".claude-plugin" / "plugin.json").read_text())
+        self.assertTrue((REPO / claude["hooks"]).is_file())
+        # Codex and Copilot pick up hooks/hooks.json on their own; ours speak Claude Code's events.
+        self.assertFalse((REPO / "hooks").exists())
+        self.assertNotIn("hooks", json.loads((REPO / "plugin.json").read_text()))
+
+    def test_skills_find_the_plugin_folder_without_a_claude_only_variable(self):
+        for skill in (REPO / "skills").glob("*/SKILL.md"):
+            text = skill.read_text()
+            self.assertNotIn("CLAUDE_PLUGIN_ROOT", text, skill)
+            self.assertIn("<plugin>/scripts/", text, skill)
+            self.assertIn("two levels above", text, skill)
+
+
 class Migration(unittest.TestCase):
     def test_anon_can_only_insert(self):
         self.assertIn("revoke all on public.events, public.feedback from anon, authenticated;", MIGRATION)

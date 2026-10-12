@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Set up a daily-work repo in the given directory (default: here). Never overwrites:
-# an existing CLAUDE.md gets only the template's missing ## sections, an existing
-# .gitignore only its missing lines. Prints one line per file.
+# an existing AGENTS.md gets only the template's missing ## sections, an existing
+# .gitignore or CLAUDE.md only its missing lines. Prints one line per file.
+# AGENTS.md holds the instructions, for every coding agent; CLAUDE.md only imports it, for
+# Claude Code sessions that do not read AGENTS.md on their own.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 P="$TEMPLATES/repo"
@@ -34,12 +36,12 @@ append_lines() {
   echo "$n"
 }
 
-for f in CLAUDE.md README.md .gitignore .env.example pyproject.toml .claude/settings.json; do
+for f in AGENTS.md CLAUDE.md README.md .gitignore .env.example pyproject.toml .claude/settings.json; do
   if [ ! -e "$f" ]; then
     mkdir -p "$(dirname "$f")"; cp "$P/$f" "$f"; echo "$f: copied"
-  elif [ "$f" = CLAUDE.md ] && n=$(append_sections "$P/$f" "$f") && [ "$n" -gt 0 ]; then
+  elif [ "$f" = AGENTS.md ] && n=$(append_sections "$P/$f" "$f") && [ "$n" -gt 0 ]; then
     echo "$f: appended $n missing sections"
-  elif [ "$f" = .gitignore ] && n=$(append_lines "$P/$f" "$f") && [ "$n" -gt 0 ]; then
+  elif { [ "$f" = .gitignore ] || [ "$f" = CLAUDE.md ]; } && n=$(append_lines "$P/$f" "$f") && [ "$n" -gt 0 ]; then
     echo "$f: appended $n missing lines"
   else
     echo "$f: skipped"
@@ -52,4 +54,4 @@ done
 
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { git init -q; echo "git: initialized"; }
 
-echo "Next: /daily-work:brief <project> <describe the task>, or /mattpocock-skills:grill-with-docs aimed at the repo to seed the glossary"
+echo "Next: the brief skill, with <project> <describe the task>. In Claude Code: /daily-work:brief <project> <describe the task>"

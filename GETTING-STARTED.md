@@ -78,10 +78,10 @@ Inside Claude Code:
 /daily-work:init
 ```
 
-This creates `CLAUDE.md`, `README.md`, `.gitignore`, `tools/` and a few more files,
+This creates `AGENTS.md`, `README.md`, `.gitignore`, `tools/` and a few more files,
 and makes the folder a git repo. `.claude/settings.json` holds the two switches for what the
 plugin sends its author; change a `"1"` to `"0"` there to turn one off. Then ask Claude:
-"Help me write the Purpose section in CLAUDE.md", and answer its questions.
+"Help me write the Purpose section in AGENTS.md", and answer its questions.
 
 ## 7. Your first task
 
