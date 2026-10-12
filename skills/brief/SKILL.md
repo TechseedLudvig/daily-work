@@ -11,6 +11,11 @@ argument-hint: "[project] <describe the task>"
 # Brief
 
 The user typed: `$ARGUMENTS`
+If that line does not show the person's text, use what they wrote after the skill name.
+
+`<plugin>` in the commands below is the daily-work plugin folder: the folder two levels above
+the one this SKILL.md is in. Write it as an absolute path. Run this skill only when the person
+asks for it by name.
 
 1. **Project.** The projects are the folders at the repo root that hold a `tasks/` folder;
    list them. If the first word of the text is one of them, that is the project and the rest
@@ -35,11 +40,11 @@ The user typed: `$ARGUMENTS`
 3. **Verify.** Show the project, the title, the task name and the rewritten brief, and ask: "Write
    this brief, or what should change?" Wait for the answer. Revise and show it again until
    the person approves. Write nothing before that.
-4. On approval, run this one Bash command from the repo root. Put the title on the first
+4. On approval, run this one command from the repo root. Put the title on the first
    heredoc line and the approved brief, unchanged, on the lines after it:
 
    ```
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/brief.sh" <project> <task-name> <<'DAILY_WORK_ARGS'
+   bash "<plugin>/scripts/brief.sh" <project> <task-name> <<'DAILY_WORK_ARGS'
    <title>
    <approved brief>
    DAILY_WORK_ARGS

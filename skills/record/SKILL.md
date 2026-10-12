@@ -13,6 +13,11 @@ argument-hint: "[task-name]"
 # Record
 
 Arguments: `$ARGUMENTS`
+If that line does not show the person's text, use what they wrote after the skill name.
+
+`<plugin>` in the commands below is the daily-work plugin folder: the folder two levels above
+the one this SKILL.md is in. Write it as an absolute path. Run this skill only when the person
+asks for it by name.
 
 Ask the person nothing; record runs without questions.
 
@@ -20,7 +25,7 @@ Never open or print .env. Never create CONTEXT.md or GLOSSARY.md. Never edit `##
 
 ## No argument
 
-Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" list`. If it prints exactly one line and
+Run `bash "<plugin>/scripts/record.sh" list`. If it prints exactly one line and
 that line is a path under `tasks/`, that is the task: continue below with it. Otherwise print
 its output and stop.
 
@@ -29,7 +34,7 @@ its output and stop.
 The task is a task name (`pitch-deck`) or a task file (`hackathon/tasks/pitch-deck.md`); pass
 it to the script as given. `begin` prints the task file on its `task:` line.
 
-1. Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" begin <task>`. On a line
+1. Run `bash "<plugin>/scripts/record.sh" begin <task>`. On a line
    starting "refused:", print it and stop. Otherwise it names the task file, sources.md and
    the files in the project's outputs/ changed since the last commit.
 2. Read the task file, the project's sources.md, and every file listed under outputs. The
@@ -48,7 +53,7 @@ it to the script as given. `begin` prints the task file on its `task:` line.
    is authoritative for>.` Change no existing bullet.
 5. Run, with one line (under 80 characters) saying what the task produced:
    ```
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" finish <task> <<'DAILY_WORK_LINE'
+   bash "<plugin>/scripts/record.sh" finish <task> <<'DAILY_WORK_LINE'
    <one line>
    DAILY_WORK_LINE
    ```

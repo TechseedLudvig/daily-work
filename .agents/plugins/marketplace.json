@@ -1,0 +1,20 @@
+{
+  "name": "daily-work",
+  "interface": {
+    "displayName": "daily-work"
+  },
+  "plugins": [
+    {
+      "name": "daily-work",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/ludvignion/daily-work.git"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

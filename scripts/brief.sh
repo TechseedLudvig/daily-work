@@ -12,7 +12,7 @@ ASK=$(sed 's/[[:space:]]*$//' | sed '/./,$!d')
 [[ $PROJECT =~ $SLUG_RE ]] || refuse "project '$PROJECT' has characters outside [a-z0-9-]; nothing created"
 [[ $SLUG =~ $SLUG_RE ]] || refuse "task name '$SLUG' has characters outside [a-z0-9-]; nothing created"
 [ -n "$ASK" ] || refuse "usage: /daily-work:brief <project> <describe the task>"
-[ -f CLAUDE.md ] || refuse "no CLAUDE.md here; run /daily-work:init first"
+[ -f AGENTS.md ] || refuse "no AGENTS.md here; run /daily-work:init first"
 
 DATE=${DAILY_WORK_DATE:-$(date +%F)}
 TITLE=${TITLE:-$SLUG}
@@ -40,4 +40,6 @@ add_under "$P/README.md" "## Tasks" "- $DATE $SLUG: open"
 telemetry event brief "$PWD/$T"
 content created "$PWD/$T"
 echo "Created $F"
-echo "Next: /mattpocock-skills:grill-with-docs $F"
+# Claude Code names the skill by its plugin; other agents run it by its own name.
+if [ -n "${CLAUDECODE:-}" ]; then echo "Next: /mattpocock-skills:grill-with-docs $F"
+else echo "Next: run the grill-with-docs skill on $F"; fi

@@ -1,10 +1,14 @@
 # daily-work
 
-A Claude Code plugin that gives a repo a structure for ad-hoc white-collar work: reading decks,
+A plugin for coding agents (Claude Code, GitHub Copilot CLI, OpenAI Codex) that gives a repo a
+structure for ad-hoc white-collar work: reading decks,
 evaluating documents, pulling and checking numbers, writing memos. Work is grouped in projects (an
 engagement, a system, a recurring responsibility). A person describes a task in a brief; Matt Pocock's
-`grill-with-docs` skill grills the brief into a task Claude can work on; the plugin records
+`grill-with-docs` skill grills the brief into a task the agent can work on; the plugin records
 what was done. Nothing here builds software.
+
+It is built and tested in Claude Code, and this README uses Claude Code's commands. For the
+other agents see [Other coding agents](#other-coding-agents).
 
 Local filesystem and git, plus two kinds of network call to the plugin author: usage
 telemetry and content logging. Both are on by default and each has its own off switch.
@@ -41,7 +45,7 @@ marketplace. daily-work uses its `grill-with-docs` skill (which calls his `grill
 does not ship or call it.
 
 Both plugins update automatically. A planned change in Matt Pocock's skills renames
-`CONTEXT.md` to `GLOSSARY.md`; it will arrive without warning, so the generated `CLAUDE.md`
+`CONTEXT.md` to `GLOSSARY.md`; it will arrive without warning, so the generated `AGENTS.md`
 reads whichever of the two exists.
 
 To update daily-work by hand: `/plugin marketplace update daily-work`, then restart Claude
@@ -58,6 +62,38 @@ claude
 To try a local checkout of daily-work instead of installing it:
 `claude --plugin-dir /path/to/daily-work`.
 
+## Other coding agents
+
+The same repo installs in GitHub Copilot CLI and OpenAI Codex. Neither has been run by the
+author yet; the install lines follow each tool's documentation.
+
+| Agent | Install |
+| --- | --- |
+| Claude Code | `/plugin marketplace add ludvignion/daily-work`, then `/plugin install daily-work@daily-work` |
+| GitHub Copilot CLI | `copilot plugin marketplace add ludvignion/daily-work`, then `copilot plugin install daily-work@daily-work` |
+| OpenAI Codex | `codex plugin marketplace add ludvignion/daily-work`, then install daily-work from the Plugins Directory |
+
+Matt Pocock's skills, needed for the grilling step, install in any agent with
+`npx skills add mattpocock/skills`.
+
+What differs outside Claude Code:
+
+| | Claude Code | Copilot CLI, Codex |
+| --- | --- | --- |
+| The four skills (init, brief, record, feedback) | yes, as `/daily-work:<skill>` | yes, under the tool's own way of naming a skill |
+| `AGENTS.md` in the work repo | read through `CLAUDE.md` | read directly |
+| Telemetry events for brief and record | yes | yes |
+| Telemetry event for a finished grilling | yes | no |
+| Content logging of prompts and replies | yes | no; only the outcome row when record finishes |
+| Switches in `.claude/settings.json` | yes | no; set `DAILY_WORK_TELEMETRY=0` or `DAILY_WORK_CONTENT=0` in your shell |
+
+The last three rows depend on Claude Code's hooks (`claude-code/hooks.json`), which the other
+agents do not load.
+
+Not supported: installing the skills alone with `npx skills add ludvignion/daily-work`. That
+copies each skill's folder without the plugin's `scripts/` and `templates/`, which the skills
+need.
+
 ## The per-task loop
 
 1. **Brief.** Describe the task in your own words:
@@ -68,7 +104,7 @@ To try a local checkout of daily-work instead of installing it:
    project folder with it if the project is new.
 2. **Grill.** `/mattpocock-skills:grill-with-docs hackathon/briefs/uns-mockup.md` (Matt Pocock's
    skill). It interviews you until the task is clear, and records terms in `CONTEXT.md` and
-   decisions in `docs/adr/`. When it ends, the generated CLAUDE.md has Claude write
+   decisions in `docs/adr/`. When it ends, the generated AGENTS.md has Claude write
    `hackathon/tasks/uns-mockup.md` and delete the brief: the brief as the Ask, what was
    settled as the Spec.
 3. **Work.** Tell Claude "work on uns-mockup". Client files go in the project's
@@ -92,7 +128,8 @@ A repo set up by this plugin (the repo here is called `techseed`):
 
 ```
 techseed/
-  CLAUDE.md                   how Claude works here
+  AGENTS.md                   how a coding agent works here
+  CLAUDE.md                   one line, @AGENTS.md, so Claude Code reads the same file
   README.md                   ## Projects: one line per project
   tools/                      code used by two or more tasks
   hackathon/                  a project
@@ -114,11 +151,12 @@ A project is any folder at the repo root that holds a `tasks/` folder.
 
 All four are user-invoked only.
 
-- **`/daily-work:init [dir]`** — creates `CLAUDE.md`, `README.md`, `.gitignore`,
+- **`/daily-work:init [dir]`** — creates `AGENTS.md`, `CLAUDE.md`, `README.md`, `.gitignore`,
   `.env.example`, `pyproject.toml`, `.claude/settings.json` and `tools/`, and runs `git init` if the
   directory is not in a repo. Prints `copied` or `skipped` per file. Never overwrites: an
-  existing `CLAUDE.md` gets only the template's missing `##` sections, an existing
-  `.gitignore` only its missing lines. Safe to re-run.
+  existing `AGENTS.md` gets only the template's missing `##` sections, an existing `CLAUDE.md`
+  only the `@AGENTS.md` line if it lacks it, an existing `.gitignore` only its missing lines.
+  Safe to re-run.
 - **`/daily-work:brief [project] <describe the task>`** — rewrites the description into a brief,
   shows it for you to verify, and on approval writes `<project>/briefs/<task-name>.md`, adds
   `- <date> <task-name>: open` under `## Tasks` in the project README, and creates the project
@@ -143,7 +181,7 @@ python-docx, pypdf and python-dotenv for `uv`; edit it to suit.
 ## What daily-work does and does not do with grill-with-docs
 
 - It never calls, wraps or edits Matt Pocock's skills, and its own skills work without them.
-- The generated `CLAUDE.md` is what makes a grilling session end by turning the brief in
+- The generated `AGENTS.md` is what makes a grilling session end by turning the brief in
   `briefs/` into the task file in `tasks/`.
 - It never creates or edits `CONTEXT.md`, `GLOSSARY.md`, `CONTEXT-MAP.md` or `docs/adr/`;
   those belong to `grill-with-docs`.

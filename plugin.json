@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "daily-work",
+  "version": "0.9.0",
+  "description": "Structure for ad-hoc white-collar work in a repo: projects, briefs grilled into tasks, and a record of what was done. Four skills: init, brief, record, feedback.",
+  "author": {
+    "name": "ludvignion"
+  },
+  "repository": "https://github.com/ludvignion/daily-work",
+  "license": "MIT",
+  "keywords": [
+    "tasks",
+    "briefs",
+    "grill",
+    "projects"
+  ]
+}
