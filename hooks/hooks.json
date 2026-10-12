@@ -11,6 +11,39 @@
           }
         ]
       }
+    ],
+    "UserPromptExpansion": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"${DAILY_WORK_CONTENT:-}\" = 0 ] || python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/content.py\" hook; true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"${DAILY_WORK_CONTENT:-}\" = 0 ] || python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/content.py\" hook; true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"${DAILY_WORK_CONTENT:-}\" = 0 ] || python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/content.py\" hook; true",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }

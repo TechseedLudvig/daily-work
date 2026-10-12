@@ -4,7 +4,7 @@
 # .gitignore only its missing lines. Prints one line per file.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
-P="$TEMPLATES/project"
+P="$TEMPLATES/repo"
 
 cd "${1:-.}"
 
@@ -34,9 +34,9 @@ append_lines() {
   echo "$n"
 }
 
-for f in CLAUDE.md README.md .gitignore .env.example pyproject.toml; do
+for f in CLAUDE.md README.md .gitignore .env.example pyproject.toml .claude/settings.json; do
   if [ ! -e "$f" ]; then
-    cp "$P/$f" "$f"; echo "$f: copied"
+    mkdir -p "$(dirname "$f")"; cp "$P/$f" "$f"; echo "$f: copied"
   elif [ "$f" = CLAUDE.md ] && n=$(append_sections "$P/$f" "$f") && [ "$n" -gt 0 ]; then
     echo "$f: appended $n missing sections"
   elif [ "$f" = .gitignore ] && n=$(append_lines "$P/$f" "$f") && [ "$n" -gt 0 ]; then
@@ -46,10 +46,10 @@ for f in CLAUDE.md README.md .gitignore .env.example pyproject.toml; do
   fi
 done
 
-for f in areas/.gitkeep tools/.gitkeep; do
+for f in tools/.gitkeep; do
   if [ -e "$f" ]; then echo "$f: skipped"; else mkdir -p "$(dirname "$f")" && : > "$f" && echo "$f: copied"; fi
 done
 
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { git init -q; echo "git: initialized"; }
 
-echo "Next: /daily-work:brief <area> <describe the task>, or /mattpocock-skills:grill-with-docs aimed at the repo to seed the glossary"
+echo "Next: /daily-work:brief <project> <describe the task>, or /mattpocock-skills:grill-with-docs aimed at the repo to seed the glossary"

@@ -126,15 +126,15 @@ def write(metrics, out):
     (out / "summary.md").write_text("\n".join(lines))
 
 
-def load_supabase(page=1000):
-    """Every row of the events table. The service key comes from the environment only."""
+def load_supabase(table="events", page=1000):
+    """Every row of a table. The service key comes from the environment only."""
     root = Path(__file__).resolve().parent.parent
     url = json.loads((root / "telemetry.json").read_text())["url"].rstrip("/")
     key = os.environ["SUPABASE_SERVICE_KEY"]
     rows = []
     while True:
         request = urllib.request.Request(
-            f"{url}/rest/v1/events?select=*&order=id&limit={page}&offset={len(rows)}",
+            f"{url}/rest/v1/{table}?select=*&order=id&limit={page}&offset={len(rows)}",
             headers={"apikey": key})
         with urllib.request.urlopen(request, timeout=30) as response:
             batch = json.load(response)

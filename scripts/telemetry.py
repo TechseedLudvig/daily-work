@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Usage telemetry for daily-work. Metadata only; README "Telemetry" lists every field.
 
-telemetry.py event <brief|record> <task folder> [rating]   called by brief.sh and record.sh
-telemetry.py hook            PostToolUse hook on Write: a grilling turned brief.md into task.md
+telemetry.py event <brief|record> <task file> [rating]   called by brief.sh and record.sh
+telemetry.py hook            PostToolUse hook on Write: a grilling turned a brief into a task file
 telemetry.py status          prints "rating: ask" when a record event would be sent
 telemetry.py post <table>    the detached child: POST stdin to that Supabase table, silently
 
@@ -68,11 +68,17 @@ def install_id():
 
 
 def task_id(task):
-    """The random UUID brief.sh stored in the task folder; None for a task without one."""
-    try:
-        return as_uuid((Path(task) / ".task-id").read_text())
-    except OSError:
-        return None
+    """The random UUID on the Id: line brief.sh wrote, read from the task file or, before
+    grilling, from its brief; None for a task without one."""
+    task = Path(task)
+    for f in (task, task.parent.parent / "briefs" / task.name):
+        try:
+            for line in f.read_text().splitlines():
+                if line.startswith("Id: "):
+                    return as_uuid(line[4:])
+        except OSError:
+            pass
+    return None
 
 
 def common(task):
@@ -138,11 +144,11 @@ def emit(event, task, extra=None):
 
 
 def grilled_task(hook):
-    """The task folder, if this Write put task.md next to a brief.md: a grilling just ended."""
+    """The task file, if this Write made tasks/<name>.md while briefs/<name>.md exists: a grilling just ended."""
     path = os.path.join(hook.get("cwd", ""), hook.get("tool_input", {}).get("file_path", ""))
-    m = re.search(r"^(.*/areas/[^/]+/tasks/[a-z0-9-]+)/task\.md$", path)
-    if m and os.path.exists(m.group(1) + "/brief.md"):
-        return m.group(1)
+    m = re.search(r"^(.*/[a-z0-9-]+)/tasks/([a-z0-9-]+\.md)$", path)
+    if m and os.path.exists(f"{m.group(1)}/briefs/{m.group(2)}"):
+        return path
     return None
 
 

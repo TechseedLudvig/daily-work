@@ -2,7 +2,7 @@
 """Opt-in feedback for daily-work: one task's file and a comment, sent only after the person
 has seen the exact payload and said yes. Stored apart from telemetry events.
 
-feedback.py preview <task folder>   comment on stdin; prints the exact payload and saves it
+feedback.py preview <task>          task name or file; comment on stdin; prints the exact payload and saves it
 feedback.py send                    POSTs the saved payload, unchanged, and deletes it
 """
 import json
@@ -30,14 +30,18 @@ def preview(task, comment):
     if not telemetry.config():
         refuse("no url and anon_key in telemetry.json; nothing can be sent")
     if not comment:
-        refuse("usage: /daily-work:feedback <task folder> <comment>")
-    files = [f for f in (Path(task) / "task.md", Path(task) / "brief.md") if f.is_file()]
-    if not files:
-        refuse(f"{task} has no task.md or brief.md")
+        refuse("usage: /daily-work:feedback <task name> <comment>")
+    # A bare task name stands for its task file or, before grilling, its brief.
+    found = [Path(task)] if "/" in task else sorted(Path().glob(f"*/tasks/{task}.md")) + sorted(Path().glob(f"*/briefs/{task}.md"))
+    if len(found) > 1:
+        refuse(f"'{task}' is a task in several projects; name one of: {' '.join(map(str, found))}")
+    f = found[0] if found else Path(task)
+    if not (f.is_file() and f.suffix == ".md" and f.parent.name in ("tasks", "briefs")):
+        refuse(f"{task} is not a task name, a task file or a brief")
     payload = {
-        **telemetry.common(task),
+        **telemetry.common(f.parent.parent / "tasks" / f.name),
         "comment": comment[:MAX_COMMENT],
-        "content": files[0].read_text()[:MAX_CONTENT],
+        "content": f.read_text()[:MAX_CONTENT],
     }
     text = json.dumps(payload, indent=2, ensure_ascii=False)
     telemetry.HOME.mkdir(parents=True, exist_ok=True)
@@ -63,8 +67,8 @@ def send():
 
 if __name__ == "__main__":
     if sys.argv[1:2] == ["preview"] and len(sys.argv) == 3:
-        preview(sys.argv[2].rstrip("/"), sys.stdin.read().strip())
+        preview(sys.argv[2], sys.stdin.read().strip())
     elif sys.argv[1:] == ["send"]:
         send()
     else:
-        refuse("usage: feedback.py preview <task folder> | send")
+        refuse("usage: feedback.py preview <task> | send")

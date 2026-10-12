@@ -78,32 +78,38 @@ Inside Claude Code:
 /daily-work:init
 ```
 
-This creates `CLAUDE.md`, `README.md`, `.gitignore`, `areas/`, `tools/` and a few more files,
-and makes the folder a git repo. Then ask Claude: "Help me write the Purpose section in
-CLAUDE.md", and answer its questions.
+This creates `CLAUDE.md`, `README.md`, `.gitignore`, `tools/` and a few more files,
+and makes the folder a git repo. `.claude/settings.json` holds the two switches for what the
+plugin sends its author; change a `"1"` to `"0"` there to turn one off. Then ask Claude:
+"Help me write the Purpose section in CLAUDE.md", and answer its questions.
 
 ## 7. Your first task
 
 All inside Claude Code, in your work repo:
 
 1. **Describe it.**
-   `/daily-work:brief <area> <what you want, in your own words>`
-   The area is a client, a system or a responsibility, e.g. `acme`. Claude rewrites your
-   text into a brief, picks a short task name for its folder (e.g. `q3-review`), and shows
-   both. Answer "yes" or say what to change.
+   `/daily-work:brief <project> <what you want, in your own words>`
+   The project is an engagement, a system or a responsibility, e.g. `acme`. Claude rewrites
+   your text into a brief, picks a short task name for its file (e.g. `q3-review`), and
+   shows both. Answer "yes" or say what to change.
 2. **Grill it.**
-   `/mattpocock-skills:grill-with-docs areas/<area>/tasks/<task-name>/brief.md`
-   Answer the questions. At the end, Claude writes `task.md` in the same folder with what
-   was settled.
-3. **Add files.** Put the client's files (decks, spreadsheets, PDFs) in the task's
+   Paste the `Next:` line step 1 printed, or type
+   `/mattpocock-skills:grill-with-docs <task-name>`.
+   Answer the questions. At the end, Claude writes `<project>/tasks/<task-name>.md` with
+   what was settled.
+3. **Add files.** Put the client's files (decks, spreadsheets, PDFs) in the project's
    `inputs/` folder. Open it from your file manager, or ask Claude where it is.
-4. **Do the work.** "Work on areas/<area>/tasks/<task-name>". Results land in `outputs/`.
+4. **Do the work.** "Work on <task-name>". Results land in the project's `outputs/`.
 5. **Close it.**
-   `/daily-work:record areas/<area>/tasks/<task-name>`
+   `/daily-work:record <task-name>`, or just `/daily-work:record` if it is your only open task.
    Claude writes what was done and what to watch out for, commits, and lists the checks
    left for you.
 
-To see which tasks are still open: `/daily-work:record` with no argument.
+With several tasks open, `/daily-work:record` with no argument lists them.
+
+To change something a project already produced, start again at step 1 and say what to
+change ("update the prices in the Q3 review"). The new task edits the file already in
+`outputs/`; it does not make a second one.
 
 ## Everyday use
 
@@ -112,7 +118,7 @@ cd work
 claude
 ```
 
-To read a file without an editor, ask Claude ("show me the task.md for acme/q3-review"), or
+To read a file without an editor, ask Claude ("show me the task file for acme/q3-review"), or
 open the folder in your file manager.
 
 ## If something is off

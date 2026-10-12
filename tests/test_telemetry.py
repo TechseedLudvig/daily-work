@@ -1,3 +1,4 @@
+import contextlib
 import io
 import json
 import os
@@ -28,9 +29,12 @@ class TelemetryCase(unittest.TestCase):
     def setUp(self):
         tmp = Path(self.enterContext(tempfile.TemporaryDirectory()))
         self.home = tmp / "config"
-        self.task = tmp / "repo" / "areas" / "acme" / "tasks" / "q3-numbers"
-        self.task.mkdir(parents=True)
-        (self.task / ".task-id").write_text(TASK_ID + "\n")
+        self.project = tmp / "repo" / "acme"
+        self.task = self.project / "tasks" / "q3-numbers.md"
+        self.brief = self.project / "briefs" / "q3-numbers.md"
+        self.task.parent.mkdir(parents=True)
+        self.brief.parent.mkdir()
+        self.task.write_text(f"# Q3\n\nProject: acme\nId: {TASK_ID}\n")
         self.sent = []
         self.enterContext(mock.patch.object(telemetry, "HOME", self.home))
         self.enterContext(mock.patch.object(telemetry, "config", lambda: ("https://x.supabase.co", "anon-key")))
@@ -69,18 +73,24 @@ class InstallId(TelemetryCase):
 
 
 class TaskId(TelemetryCase):
-    def test_is_read_from_the_task_folder(self):
+    def test_is_read_from_the_id_line_of_the_task_file(self):
         self.assertEqual(telemetry.task_id(self.task), TASK_ID)
 
-    def test_missing_or_damaged_file_means_no_task_id(self):
-        (self.task / ".task-id").write_text("areas/acme/tasks/q3-numbers")
+    def test_before_grilling_it_is_read_from_the_brief(self):
+        self.task.rename(self.brief)
+        self.assertEqual(telemetry.task_id(self.task), TASK_ID)
+
+    def test_missing_or_damaged_line_means_no_task_id(self):
+        self.task.write_text("# Q3\n\nId: acme/tasks/q3-numbers\n")
         self.assertIsNone(telemetry.task_id(self.task))
-        (self.task / ".task-id").unlink()
+        self.task.write_text("# Q3\n")
+        self.assertIsNone(telemetry.task_id(self.task))
+        self.task.unlink()
         self.assertIsNone(telemetry.task_id(self.task))
         self.assertNotIn("task_id", telemetry.common(self.task))
 
-    def test_an_old_task_still_sends_its_record_event_without_a_task_id(self):
-        (self.task / ".task-id").unlink()
+    def test_a_task_without_an_id_line_still_sends_its_record_event(self):
+        self.task.write_text("# Q3\n")
         self.emit("record", self.task)  # first run: the notice
         self.emit("record", self.task, {"rating": 2})
         self.assertEqual(set(self.sent[0][1]), {"event", "ts", "plugin_version", "install_id", "rating"})
@@ -92,8 +102,8 @@ class SupabasePayloads(TelemetryCase):
         self.emit("brief", self.task)
         self.emit("record", self.task, {"rating": 4})
         with redirect_stdout(io.StringIO()):
-            hook = {"cwd": "/", "tool_input": {"file_path": str(self.task / "task.md")}}
-            (self.task / "brief.md").write_text("x")
+            hook = {"cwd": "/", "tool_input": {"file_path": str(self.task)}}
+            self.brief.write_text("x")
             with mock.patch.object(sys, "stdin", io.StringIO(json.dumps(hook))):
                 telemetry.main(["telemetry.py", "hook"])
         return self.sent
@@ -117,7 +127,7 @@ class SupabasePayloads(TelemetryCase):
 
     def test_no_path_or_name_is_in_any_payload(self):
         text = json.dumps(self.events())
-        for clear in ("acme", "q3-numbers", "areas", str(self.task.parent.parent.parent.parent)):
+        for clear in ("acme", "q3-numbers", "tasks", str(self.project.parent)):
             self.assertNotIn(clear, text)
 
     def test_request_is_an_insert_with_the_anon_key(self):
@@ -135,14 +145,21 @@ class SupabasePayloads(TelemetryCase):
 
     def test_feedback_payload_has_exactly_the_feedback_columns(self):
         import feedback
-        (self.task / "task.md").write_text("# Task\n")
         with redirect_stdout(io.StringIO()) as out:
             feedback.preview(str(self.task), "grill asked too much")
         payload = json.loads((self.home / "feedback-pending.json").read_text())
         self.assertEqual(set(payload), granted("feedback"))
-        self.assertEqual((payload["comment"], payload["content"]), ("grill asked too much", "# Task\n"))
+        self.assertEqual((payload["comment"], payload["content"]), ("grill asked too much", self.task.read_text()))
         self.assertIn((self.home / "feedback-pending.json").read_text(), out.getvalue())
         self.assertEqual(self.sent, [])
+
+
+    def test_feedback_finds_a_task_by_its_name(self):
+        import feedback
+        with contextlib.chdir(self.project.parent), redirect_stdout(io.StringIO()):
+            feedback.preview("q3-numbers", "fine")
+        payload = json.loads((self.home / "feedback-pending.json").read_text())
+        self.assertEqual((payload["task_id"], payload["content"]), (TASK_ID, self.task.read_text()))
 
 
 class Migration(unittest.TestCase):
@@ -191,19 +208,25 @@ class OptOut(TelemetryCase):
 
 class GrillHook(TelemetryCase):
     def hook(self, name):
-        return {"cwd": str(self.task.parent), "tool_input": {"file_path": str(self.task / name)}}
+        return {"cwd": str(self.project), "tool_input": {"file_path": str(self.project / name)}}
 
-    def test_task_md_written_beside_a_brief_is_a_finished_grilling(self):
-        (self.task / "brief.md").write_text("x")
-        self.assertEqual(telemetry.grilled_task(self.hook("task.md")), str(self.task))
+    def test_a_task_file_written_for_an_existing_brief_is_a_finished_grilling(self):
+        self.brief.write_text("x")
+        self.assertEqual(telemetry.grilled_task(self.hook("tasks/q3-numbers.md")), str(self.task))
 
-    def test_task_md_without_a_brief_is_not(self):
-        self.assertIsNone(telemetry.grilled_task(self.hook("task.md")))
+    def test_a_relative_path_is_read_from_the_cwd(self):
+        self.brief.write_text("x")
+        hook = {"cwd": str(self.project.parent), "tool_input": {"file_path": "acme/tasks/q3-numbers.md"}}
+        self.assertEqual(telemetry.grilled_task(hook), str(self.task))
+
+    def test_a_task_file_without_a_brief_is_not(self):
+        self.assertIsNone(telemetry.grilled_task(self.hook("tasks/q3-numbers.md")))
 
     def test_other_files_are_not(self):
-        (self.task / "brief.md").write_text("x")
-        self.assertIsNone(telemetry.grilled_task(self.hook("outputs/task.md")))
-        self.assertIsNone(telemetry.grilled_task(self.hook("notes.md")))
+        self.brief.write_text("x")
+        self.assertIsNone(telemetry.grilled_task(self.hook("outputs/q3-numbers.md")))
+        self.assertIsNone(telemetry.grilled_task(self.hook("tasks/other.md")))
+        self.assertIsNone(telemetry.grilled_task(self.hook("briefs/q3-numbers.md")))
         self.assertIsNone(telemetry.grilled_task({}))
 
 

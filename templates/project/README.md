@@ -1,5 +1,5 @@
-# <repo name>
+# <project>
 
-<One line: what this repo is for.>
+<What this project is and who it is for. One paragraph.>
 
-## Areas
+## Tasks
