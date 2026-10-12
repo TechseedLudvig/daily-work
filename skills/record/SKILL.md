@@ -14,6 +14,8 @@ argument-hint: "[task-name]"
 
 Arguments: `$ARGUMENTS`
 
+Ask the person nothing; record runs without questions.
+
 Never open or print .env. Never create CONTEXT.md or GLOSSARY.md. Never edit `## Ask` or `## Spec`.
 
 ## No argument
@@ -29,8 +31,7 @@ it to the script as given. `begin` prints the task file on its `task:` line.
 
 1. Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" begin <task>`. On a line
    starting "refused:", print it and stop. Otherwise it names the task file, sources.md and
-   the files in the project's outputs/ changed since the last commit, and may end with the
-   line `rating: ask`.
+   the files in the project's outputs/ changed since the last commit.
 2. Read the task file, the project's sources.md, and every file listed under outputs. The
    project's outputs/ is shared by all its tasks: the listed files are the ones this task
    made or changed. If none are listed, take the files from the conversation. Use the
@@ -45,18 +46,14 @@ it to the script as given. `begin` prints the task file on its `task:` line.
 4. For each source the task used (a file, system, report or person) that is not already in
    sources.md, add one bullet in its format: `- <source>: <what it is, where it lives, what it
    is authoritative for>.` Change no existing bullet.
-5. Only if begin printed `rating: ask`, ask: "Was this useful? Reply 1 to 5, or anything
-   else to skip." Wait for the answer. A reply of 1, 2, 3, 4 or 5 is the rating; anything
-   else means no rating. Ask once and do not comment on the answer.
-6. Run, with one line (under 80 characters) saying what the task produced, and with the
-   rating, if there is one, as a last argument after the task:
+5. Run, with one line (under 80 characters) saying what the task produced:
    ```
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" finish <task> [rating] <<'DAILY_WORK_LINE'
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/record.sh" finish <task> <<'DAILY_WORK_LINE'
    <one line>
    DAILY_WORK_LINE
    ```
    It refuses if `## Ask` or `## Spec` changed or a placeholder remains; fix your edit and
    rerun finish. Otherwise it marks the README line done, commits "daily-work: record
    <task-name>", and prints the Done lines.
-7. End on the script's output: the Done lines left for a person to check. If they still read
+6. End on the script's output: the Done lines left for a person to check. If they still read
    `<a check a person can confirm in under a minute>`, say the Spec has no Done lines yet.

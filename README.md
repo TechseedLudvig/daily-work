@@ -9,8 +9,8 @@ what was done. Nothing here builds software.
 Local filesystem and git, plus two kinds of network call to the plugin author: usage
 telemetry and content logging. Both are on by default and each has its own off switch.
 When `brief`, a grilling or `record` completes, the plugin sends the event name, a UTC
-timestamp, the plugin version, a random install id, a random task id, the grill outcome, and
-your 1 to 5 rating if you give one. No personal or machine identifiers are sent. It is on by
+timestamp, the plugin version, a random install id, a random task id, and the grill outcome.
+No personal or machine identifiers are sent. It is on by
 default; set `DAILY_WORK_TELEMETRY=0` to send nothing. The telemetry code never reads
 transcripts or task content. See [Telemetry](#telemetry). The plugin never opens `.env`.
 
@@ -130,8 +130,8 @@ All four are user-invoked only.
   `daily-work: record <task-name>`, and prints the Done lines left to check. The commit takes
   the task file, the project's `outputs/`, `README.md` and `sources.md`, the repo `README.md`
   and `tools/`. It refuses to commit if `## Ask` or `## Spec` changed. With no argument it
-  records the only open task, or lists the open tasks if there are several. With telemetry on, it first asks "Was this useful?" (1 to 5, anything
-  else skips).
+  records the only open task, or lists the open tasks if there are several. It asks you
+  nothing.
 - **`/daily-work:feedback <task-name> <comment>`** — sends the plugin author that task file
   (or its brief) and your comment. It prints exactly what will be sent and sends only after
   you answer yes. See [Telemetry](#telemetry).
@@ -192,8 +192,7 @@ task file of a brief, and one when `/daily-work:record` commits.
 | `install_id` | a random UUID, see below |
 | `task_id` | a random UUID, see below; left out for tasks that have none |
 
-Grill events add `outcome` (`completed`). Record events add `rating`, 1 to 5, only if you
-gave one. Nothing else is sent.
+Grill events add `outcome` (`completed`). Nothing else is sent.
 
 **Never sent by telemetry:** your name, email, git identity, user name, host name or any other personal
 or machine identifier, in clear text or hashed; prompts; file names; paths; project or task
@@ -220,8 +219,7 @@ nothing. Events start with the run after that.
 change `"DAILY_WORK_TELEMETRY": "1"` to `"0"` and restart Claude Code. See
 [Where the switches live](#where-the-switches-live).
 
-Nothing is sent, no notice is shown, no install id is made, and `/daily-work:record` does
-not ask for a rating.
+Nothing is sent, no notice is shown and no install id is made.
 
 **Feedback is separate and opt-in.** `/daily-work:feedback <task-name> <comment>` sends
 that one task file (or the brief if it is not grilled yet), your comment, and the
@@ -258,7 +256,8 @@ sends nothing; logging starts with the run after it, so you can turn it off in b
 **A run** is one `/daily-work:brief` (from the command until the brief is written),
 one grilling of a brief (from `/mattpocock-skills:grill-with-docs <brief or task name>` until
 its task file exists), or one `/daily-work:record` (from the command until the
-commit). Work done between runs is not logged. A run that never ends is never sent.
+commit). A command typed inside a sentence starts a run too. Work done between runs is not
+logged. A run that never ends is never sent.
 
 **Sent per run:**
 
@@ -276,7 +275,7 @@ What you type is sent as typed. A `/daily-work:record q3-numbers` line
 therefore carries that task name, and Claude's answers may name files and quote task content.
 
 **Sent once when record finishes:** `kind` `outcome`, `ts`, `plugin_version`, `content_id`,
-`outcome` (`completed`), `rating` if you gave one, and `grill_completed`: whether a grill
+`outcome` (`completed`), and `grill_completed`: whether a grill
 run of this task was logged.
 
 **Never sent:** file contents, the transcript, tool calls and their output, Claude's

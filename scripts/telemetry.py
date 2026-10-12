@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Usage telemetry for daily-work. Metadata only; README "Telemetry" lists every field.
 
-telemetry.py event <brief|record> <task file> [rating]   called by brief.sh and record.sh
+telemetry.py event <brief|record> <task file>   called by brief.sh and record.sh
 telemetry.py hook            PostToolUse hook on Write: a grilling turned a brief into a task file
-telemetry.py status          prints "rating: ask" when a record event would be sent
 telemetry.py post <table>    the detached child: POST stdin to that Supabase table, silently
 
 Nothing here may break or slow a command: every failure is swallowed, and the POST runs in
@@ -28,7 +27,7 @@ daily-work telemetry (shown once)
 From the next run on, daily-work sends its author usage metadata, to see whether the
 brief, grill, record loop gets used and where it stalls.
 Sent: event name (brief, grill, record), UTC time, plugin version, a random install id, a
-random task id, the grill outcome, and your 1 to 5 rating if you give one.
+random task id, and the grill outcome.
 Never sent: anything that identifies you or your machine, prompts, file names, paths, task
 content, transcripts.
 Opt out: set DAILY_WORK_TELEMETRY=0. Details: the plugin README, "Telemetry"."""
@@ -92,10 +91,6 @@ def common(task):
     return out
 
 
-def rating(text):
-    return {"rating": int(text)} if text in ("1", "2", "3", "4", "5") else {}
-
-
 def first_run_notice():
     """Print the notice once. True if it was printed now; that run sends nothing."""
     f = HOME / "notice-shown"
@@ -156,11 +151,8 @@ def main(argv):
     cmd = argv[1] if len(argv) > 1 else ""
     if cmd == "post":
         post(argv[2], sys.stdin.buffer.read())
-    elif cmd == "status":
-        if ready():
-            print("rating: ask")
     elif cmd == "event":
-        emit(argv[2], argv[3], rating(argv[4]) if argv[2] == "record" and len(argv) > 4 else None)
+        emit(argv[2], argv[3])
     elif cmd == "hook":
         # A hook's output is not shown to the person, so it never counts as the first-run notice.
         task = grilled_task(json.load(sys.stdin))

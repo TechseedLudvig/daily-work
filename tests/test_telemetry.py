@@ -92,15 +92,15 @@ class TaskId(TelemetryCase):
     def test_a_task_without_an_id_line_still_sends_its_record_event(self):
         self.task.write_text("# Q3\n")
         self.emit("record", self.task)  # first run: the notice
-        self.emit("record", self.task, {"rating": 2})
-        self.assertEqual(set(self.sent[0][1]), {"event", "ts", "plugin_version", "install_id", "rating"})
+        self.emit("record", self.task)
+        self.assertEqual(set(self.sent[0][1]), {"event", "ts", "plugin_version", "install_id"})
 
 
 class SupabasePayloads(TelemetryCase):
     def events(self):
         self.emit("brief", self.task)  # first run: the notice
         self.emit("brief", self.task)
-        self.emit("record", self.task, {"rating": 4})
+        self.emit("record", self.task)
         with redirect_stdout(io.StringIO()):
             hook = {"cwd": "/", "tool_input": {"file_path": str(self.task)}}
             self.brief.write_text("x")
@@ -113,9 +113,9 @@ class SupabasePayloads(TelemetryCase):
         (t1, brief), (t2, record), (t3, grill) = self.events()
         self.assertEqual({t1, t2, t3}, {"events"})
         self.assertEqual(set(brief), base)
-        self.assertEqual(set(record), base | {"rating"})
+        self.assertEqual(set(record), base)
         self.assertEqual(set(grill), base | {"outcome"})
-        self.assertEqual((brief["event"], record["rating"], grill["outcome"]), ("brief", 4, "completed"))
+        self.assertEqual((brief["event"], record["event"], grill["outcome"]), ("brief", "record", "completed"))
 
     def test_values_fit_the_migration(self):
         for _, payload in self.events():
@@ -138,10 +138,12 @@ class SupabasePayloads(TelemetryCase):
         self.assertEqual(r.get_header("Prefer"), "return=minimal")
         self.assertEqual(r.get_header("Content-type"), "application/json")
 
-    def test_rating_accepts_only_1_to_5(self):
-        self.assertEqual(telemetry.rating("5"), {"rating": 5})
-        for text in ("", "0", "6", "yes", "3.5", " 3"):
-            self.assertEqual(telemetry.rating(text), {})
+    def test_no_rating_is_asked_for_or_sent(self):
+        self.assertNotIn("rating", (REPO / "scripts" / "telemetry.py").read_text())
+        self.assertNotIn("rating", (REPO / "scripts" / "record.sh").read_text())
+        skill = (REPO / "skills" / "record" / "SKILL.md").read_text()
+        self.assertNotIn("rating", skill)
+        self.assertNotIn("Was this useful", skill)
 
     def test_feedback_payload_has_exactly_the_feedback_columns(self):
         import feedback

@@ -5,7 +5,7 @@ content.py hook                  UserPromptExpansion, UserPromptSubmit and Stop 
                                  turns of a brief, grill or record run, send them when it ends
 content.py created <task file>            brief.sh: the open brief run got its task
 content.py id <task file>                 record.sh, before its commit: make the content id file
-content.py outcome <task file> [rating]   record.sh, after its commit: send the outcome row
+content.py outcome <task file>            record.sh, after its commit: send the outcome row
 
 <task file> is <project>/tasks/<task-name>.md, also while the task is still a brief.
 
@@ -34,6 +34,7 @@ SKILLS = {
 }
 BRIEF = re.compile(r"^[a-z0-9-]+/briefs/[a-z0-9-]+\.md$")
 NAME = re.compile(r"^[a-z0-9-]+$")
+INLINE = re.compile(r"(?<!\S)/(%s)(?:[ \t]+(\S+))?" % "|".join(map(re.escape, SKILLS)))
 
 NOTICE = """\
 daily-work content logging (shown once)
@@ -155,13 +156,10 @@ def open_runs(skill):
 
 # --- hooks ---
 
-def on_command(hook):
-    """A slash command was typed. It ends whatever run was open; ours start a new one."""
+def start(hook, skill, words, prompt_id):
+    """Open a run for one of our commands. Whatever run was open ends unsent."""
     session = hook["session_id"]
     drop(session)
-    skill = SKILLS.get(hook.get("command_name"))
-    args = hook.get("command_args") or ""
-    words = (" ".join(args) if isinstance(args, list) else args).split()
     task = None
     if skill == "grill":
         # A grill run is the grilling of a brief, named by its path or by its task name.
@@ -174,20 +172,34 @@ def on_command(hook):
             return
     if skill:
         save(session, {"skill": skill, "cwd": hook["cwd"], "task": task, "started": time.time(),
-                       "prompt_id": hook.get("prompt_id"), "ended": False,
+                       "prompt_id": prompt_id, "ended": False,
                        "turns": [turn("user", hook.get("prompt", ""))]})
 
 
+def on_command(hook):
+    """A slash command was typed. It ends whatever run was open; ours start a new one."""
+    args = hook.get("command_args") or ""
+    words = (" ".join(args) if isinstance(args, list) else args).split()
+    start(hook, SKILLS.get(hook.get("command_name")), words, hook.get("prompt_id"))
+
+
 def on_prompt(hook):
-    run = load(hook["session_id"])
+    session = hook["session_id"]
+    run = load(session)
     text = hook.get("prompt", "")
-    if not run or text.startswith("<task-notification>"):
+    if text.startswith("<task-notification>"):
         return
-    if run["prompt_id"] and hook.get("prompt_id") == run["prompt_id"]:
+    if run and run["prompt_id"] and hook.get("prompt_id") == run["prompt_id"]:
         run["prompt_id"] = None  # the slash command itself, already kept by on_command
-    else:
+        return save(session, run)
+    m = INLINE.search(text)
+    if m:
+        # One of our commands typed inside a sentence gets no UserPromptExpansion, but the
+        # skill runs all the same; so does the run.
+        return start(hook, SKILLS[m.group(1)], [m.group(2)] if m.group(2) else [], None)
+    if run:
         run["turns"].append(turn("user", text))
-    save(hook["session_id"], run)
+        save(session, run)
 
 
 def on_stop(hook):
@@ -228,7 +240,7 @@ def created(task):
         save(session, {**run, "task": task, "ended": True})
 
 
-def outcome(task, rating_text):
+def outcome(task):
     if not enabled() or notice_due():
         return
     mine = [(s, r) for s, r in open_runs("record") if task.startswith(r["cwd"].rstrip("/") + "/")]
@@ -238,7 +250,7 @@ def outcome(task, rating_text):
     telemetry.send("content", {
         "kind": "outcome", "ts": hour(), "plugin_version": telemetry.version(),
         "content_id": content_id(task), "outcome": "completed",
-        "grill_completed": grilled(task), **telemetry.rating(rating_text),
+        "grill_completed": grilled(task),
     })
 
 
@@ -256,7 +268,7 @@ def main(argv):
         if ready():
             content_id(task)
     elif cmd == "outcome":
-        outcome(task, argv[3] if len(argv) > 3 else "")
+        outcome(task)
 
 
 if __name__ == "__main__":

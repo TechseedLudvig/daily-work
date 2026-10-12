@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # record.sh list             tasks whose project README line says "open"
 # record.sh begin <task>     check the task, snapshot Ask and Spec, list what to read
-# record.sh finish <task> [rating]    one-line summary on stdin; verify Ask and Spec
-#                            unchanged, mark the README line done, commit, print the Done
-#                            lines. The optional 1 to 5 rating goes into the usage event.
+# record.sh finish <task>    one-line summary on stdin; verify Ask and Spec unchanged, mark
+#                            the README line done, commit, print the Done lines.
 # <task> is the task name, or the task file <project>/tasks/<task-name>.md.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
@@ -24,7 +23,7 @@ if [ "${1:-}" = list ]; then
 fi
 
 MODE=${1:-}; T=${2:-}
-[[ $MODE == begin || $MODE == finish ]] || refuse "usage: record.sh list | begin <task> | finish <task> [rating]"
+[[ $MODE == begin || $MODE == finish ]] || refuse "usage: record.sh list | begin <task> | finish <task>"
 T=${T#"$PWD/"}; T=${T#./}
 # A bare task name stands for its task file, in whichever project holds it.
 if [[ $T =~ $SLUG_RE ]]; then
@@ -60,7 +59,6 @@ if [ "$MODE" = begin ]; then
   out=$(changed_outputs)
   if [ -n "$out" ]; then echo "outputs changed since the last commit:"; sed 's/^/  /' <<< "$out"
   else echo "outputs changed since the last commit: none"; fi
-  telemetry status
   exit 0
 fi
 
@@ -72,7 +70,7 @@ SUM=$(tr '\n' ' ' | sed 's/[[:space:]]\+/ /g; s/^ //; s/ $//')
 
 # Keep the date already on the README line; a task without one takes its Created date.
 RE="^- ([0-9]{4}-[0-9]{2}-[0-9]{2}) $SLUG:"
-DATE=$(grep -oE "$RE" "$P/README.md" | head -1 | cut -d' ' -f2)
+DATE=$(grep -oE "$RE" "$P/README.md" | head -1 | cut -d' ' -f2 || true)
 [ -n "$DATE" ] || DATE=$(sed -n 's/^Created: //p' "$T" | head -1)
 LINE="- $DATE $SLUG: done, $SUM"
 if grep -qE "$RE" "$P/README.md"; then
@@ -91,8 +89,8 @@ done
 git add -- "${paths[@]}"
 git commit -q -m "daily-work: record $SLUG" -- "${paths[@]}" || refuse "git commit failed; README line updated but nothing committed"
 rm -f "$SNAP"
-telemetry event record "$PWD/$T" "${3:-}"
-content outcome "$PWD/$T" "${3:-}"
+telemetry event record "$PWD/$T"
+content outcome "$PWD/$T"
 
 echo "committed: $(git rev-parse --short HEAD) daily-work: record $SLUG"
 echo "$P/README.md: $LINE"

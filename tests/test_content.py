@@ -84,7 +84,7 @@ class OptIn(ContentCase):
         os.environ["DAILY_WORK_CONTENT"] = "0"
         self.assertEqual(self.run_main("created", str(self.task)), "")
         self.brief_run()
-        self.assertEqual(self.run_main("outcome", str(self.task), "5"), "")
+        self.assertEqual(self.run_main("outcome", str(self.task)), "")
         self.assertEqual(self.sent, [])
         self.assertFalse(self.home.exists())
         self.assertFalse(self.id_file.exists())
@@ -133,7 +133,7 @@ class FirstRunNotice(ContentCase):
         self.assertFalse((self.home / "content-runs").exists())
 
     def test_notice_from_record_also_sends_nothing(self):
-        self.assertIn("shown once", self.run_main("outcome", str(self.task), "4"))
+        self.assertIn("shown once", self.run_main("outcome", str(self.task)))
         self.assertEqual(self.sent, [])
 
     def test_next_run_sends_and_shows_no_notice(self):
@@ -229,11 +229,40 @@ class Runs(ContentCase):
 
     def test_a_record_run_without_an_argument_gets_its_task_from_record_sh(self):
         self.command("daily-work:record", "")
-        self.reply("Was this useful?")
+        self.reply("Reading the task")
+        self.say("go on")
         self.run_main("outcome", str(self.task))
         self.reply("committed")
         self.assertEqual([(p["kind"], p.get("skill")) for _, p in self.sent], [("outcome", None), ("run", "record")])
         self.assertEqual(len({p["content_id"] for _, p in self.sent}), 1)
+
+    def test_a_command_typed_inside_a_sentence_starts_a_run_too(self):
+        self.say("Looks great! /daily-work:record q3-numbers works. Can the colour change?")
+        self.reply("Reading the task")
+        self.say("go on", prompt_id="p3")
+        self.run_main("outcome", str(self.task))
+        self.reply("committed")
+        run = next(p for _, p in self.sent if p["kind"] == "run")
+        self.assertEqual((run["skill"], [t["role"] for t in run["turns"]]), ("record", ["user", "assistant", "user", "assistant"]))
+        self.assertIn("Looks great!", run["turns"][0]["text"])
+
+    def test_a_grill_command_inside_a_sentence_names_its_brief(self):
+        self.brief.write_text("# Q3\n")
+        self.say("ok now /mattpocock-skills:grill-with-docs q3-numbers please")
+        self.task.write_text("# Q3\n")
+        self.reply("task file written")
+        self.assertEqual([p["skill"] for _, p in self.sent], ["grill"])
+
+    def test_a_slash_command_is_kept_once_not_twice(self):
+        self.command("daily-work:record", "q3-numbers")
+        self.run_main("outcome", str(self.task))
+        self.reply("committed")
+        run = next(p for _, p in self.sent if p["kind"] == "run")
+        self.assertEqual([t["text"] for t in run["turns"]], ["/daily-work:record q3-numbers", "committed"])
+
+    def test_other_text_with_a_slash_starts_nothing(self):
+        self.say("see docs/daily-work:record and /some-plugin:other x")
+        self.assertFalse(list((self.home / "content-runs").glob("*.json")))
 
     def test_grilling_something_other_than_a_brief_is_not_a_run(self):
         self.command("mattpocock-skills:grill-with-docs", "the whole repo")
@@ -308,33 +337,27 @@ class Outcome(ContentCase):
         super().setUp()
         self.accept_notice()
 
-    def record(self, *rating):
+    def record(self):
         self.command("daily-work:record", "acme/tasks/q3-numbers.md")
-        self.reply("Was this useful?")
-        self.say(rating[0] if rating else "skip")
         self.run_main("id", str(self.task))
-        self.run_main("outcome", str(self.task), *rating)
+        self.run_main("outcome", str(self.task))
         self.reply("committed")
 
     def test_record_sends_one_outcome_row_and_the_record_run(self):
-        self.record("4")
+        self.record()
         (t1, outcome), (t2, run) = self.sent
         self.assertEqual((t1, t2), ("content", "content"))
         self.assertEqual(outcome, {"kind": "outcome", "ts": outcome["ts"], "plugin_version": telemetry.version(),
                                    "content_id": run["content_id"], "outcome": "completed",
-                                   "grill_completed": False, "rating": 4})
-        self.assertEqual((run["kind"], run["skill"], len(run["turns"])), ("run", "record", 4))
-
-    def test_rating_is_left_out_when_not_given(self):
-        self.record()
-        self.assertNotIn("rating", self.sent[0][1])
+                                   "grill_completed": False})
+        self.assertEqual((run["kind"], run["skill"], len(run["turns"])), ("run", "record", 2))
 
     def test_grill_completed_is_true_after_a_logged_grill_run(self):
         self.brief.write_text("# Q3\n")
         self.command("mattpocock-skills:grill-with-docs", "acme/briefs/q3-numbers.md")
         self.task.write_text("# Q3\n")
         self.reply("task file written")
-        self.record("5")
+        self.record()
         outcome = next(p for _, p in self.sent if p["kind"] == "outcome")
         self.assertTrue(outcome["grill_completed"])
         self.assertEqual({p["content_id"] for _, p in self.sent}, {outcome["content_id"]})
@@ -350,7 +373,7 @@ class Separation(ContentCase):
         self.task.write_text(f"# Q3\n\nId: {task_id}\n")
         self.assertEqual(telemetry.task_id(self.task), task_id)
         self.command("daily-work:record", "acme/tasks/q3-numbers.md")
-        self.run_main("outcome", str(self.task), "3")
+        self.run_main("outcome", str(self.task))
         self.reply("committed")
         self.assertEqual(len(self.sent), 3)
         for table, payload in self.sent:
@@ -372,7 +395,7 @@ class Separation(ContentCase):
     def test_payloads_use_only_columns_the_migration_grants(self):
         self.accept_notice()
         self.brief_run()
-        self.run_main("outcome", str(self.task), "2")
+        self.run_main("outcome", str(self.task))
         for _, payload in self.sent:
             self.assertLessEqual(set(payload), GRANTED)
         self.assertNotIn("install_id", GRANTED)
