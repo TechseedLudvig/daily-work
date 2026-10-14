@@ -1,0 +1,46 @@
+{
+  "kind": "deck review",
+  "project": "sales-kickoff",
+  "facts": [
+    {
+      "id": "goal",
+      "essential": true,
+      "fact": "Catch errors and unclear points in the deck before it is sent out."
+    },
+    {
+      "id": "focus",
+      "essential": true,
+      "fact": "Numbers and consistency between slides. Not design, not wording polish."
+    },
+    {
+      "id": "output",
+      "essential": true,
+      "fact": "A list of findings, each with its slide number. No rewritten deck."
+    },
+    {
+      "id": "audience",
+      "essential": true,
+      "fact": "The deck goes to the regional sales leads, twelve people, who will present it to their teams."
+    },
+    {
+      "id": "deadline",
+      "essential": false,
+      "fact": "I send the deck on {{today+2d}}."
+    },
+    {
+      "id": "tone",
+      "essential": false,
+      "fact": "Blunt is fine."
+    }
+  ],
+  "covered_by_docs": [
+    {
+      "topic": "what each slide says",
+      "doc": "kickoff-deck.md"
+    },
+    {
+      "topic": "the revenue and target figures",
+      "doc": "kickoff-deck.md"
+    }
+  ]
+}

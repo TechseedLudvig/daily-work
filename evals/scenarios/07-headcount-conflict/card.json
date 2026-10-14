@@ -1,0 +1,46 @@
+{
+  "kind": "request where the user and the documents conflict",
+  "project": "budget-2027",
+  "facts": [
+    {
+      "id": "total",
+      "essential": true,
+      "fact": "45 positions is right. The board added three positions at its meeting last week."
+    },
+    {
+      "id": "doc_outdated",
+      "essential": true,
+      "fact": "The headcount plan document is from before that meeting and still says 42."
+    },
+    {
+      "id": "where_added",
+      "essential": true,
+      "fact": "All three new positions are in Engineering, which goes from 20 to 23."
+    },
+    {
+      "id": "audience",
+      "essential": true,
+      "fact": "The CFO, for the budget review."
+    },
+    {
+      "id": "format",
+      "essential": true,
+      "fact": "One page, with a table of positions per department."
+    },
+    {
+      "id": "note_difference",
+      "essential": false,
+      "fact": "Say in the summary that it differs from the plan document and why."
+    }
+  ],
+  "covered_by_docs": [
+    {
+      "topic": "positions per department in the approved plan",
+      "doc": "headcount-plan-2027.md"
+    },
+    {
+      "topic": "which departments exist",
+      "doc": "headcount-plan-2027.md"
+    }
+  ]
+}

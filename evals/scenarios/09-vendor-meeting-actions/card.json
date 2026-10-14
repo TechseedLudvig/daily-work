@@ -1,0 +1,54 @@
+{
+  "kind": "summary from notes",
+  "project": "helpdesk-tool",
+  "facts": [
+    {
+      "id": "output",
+      "essential": true,
+      "fact": "Decisions and an action list with owner and due date. Not minutes of who said what."
+    },
+    {
+      "id": "recipients",
+      "essential": true,
+      "fact": "It goes to the people who attended and to the head of IT, who was not there, so it has to make sense without having been in the room."
+    },
+    {
+      "id": "confidential",
+      "essential": true,
+      "fact": "Leave out everything about price and discount. That part is confidential."
+    },
+    {
+      "id": "length",
+      "essential": true,
+      "fact": "Short enough to be the body of an email: half a page at most."
+    },
+    {
+      "id": "sign",
+      "essential": false,
+      "fact": "Sign it with my first name, Karin."
+    },
+    {
+      "id": "language",
+      "essential": false,
+      "fact": "English."
+    }
+  ],
+  "covered_by_docs": [
+    {
+      "topic": "who attended",
+      "doc": "vendor-meeting-notes.md"
+    },
+    {
+      "topic": "what was decided",
+      "doc": "vendor-meeting-notes.md"
+    },
+    {
+      "topic": "the action items, their owners and dates",
+      "doc": "vendor-meeting-notes.md"
+    },
+    {
+      "topic": "when the pilot starts",
+      "doc": "vendor-meeting-notes.md"
+    }
+  ]
+}

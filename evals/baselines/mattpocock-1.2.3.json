@@ -1,0 +1,7301 @@
+{
+  "meta": {
+    "run_id": "20261014-110844",
+    "date": "2026-10-14",
+    "grill": "mattpocock-1.2.3",
+    "grill_sha256": "e960f46db0ed2144554504738278eef4fe1f1dbd41f527631b37c5a3f92421d9",
+    "plugin_version": "0.9.0",
+    "commit": "811e8f8+changes",
+    "scenarios": [
+      "01-supplier-memo",
+      "02-travel-cost-check",
+      "03-kickoff-deck-review",
+      "04-signup-dedupe-script",
+      "05-vague-onboarding",
+      "06-facilities-report",
+      "07-headcount-conflict",
+      "08-update-price-list",
+      "09-vendor-meeting-actions",
+      "10-survey-tool-comparison"
+    ],
+    "runs_per_scenario": 3,
+    "steps": [
+      "brief",
+      "grill",
+      "work",
+      "record"
+    ],
+    "config": {
+      "models": {
+        "plugin": "sonnet",
+        "user": "sonnet",
+        "judge": "opus"
+      },
+      "temperature": null,
+      "runs_per_scenario": 3,
+      "jobs": 3,
+      "call_timeout_seconds": 900,
+      "turn_caps": {
+        "brief": 6,
+        "grill": 12,
+        "work": 4,
+        "record": 1
+      },
+      "plugin_tools": [
+        "Bash",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "Skill",
+        "Agent"
+      ],
+      "grills": {
+        "mattpocock-1.2.3": {
+          "plugin_dir": "~/.claude/plugins/cache/claude-plugins-official/mattpocock-skills/1.2.3",
+          "command": "/mattpocock-skills:grill-with-docs {brief}",
+          "sha256": "e960f46db0ed2144554504738278eef4fe1f1dbd41f527631b37c5a3f92421d9",
+          "note": "mattpocock/skills 1.2.3, commit c55ee46073ed923f86ce59a5eb3b6d895095d1b7"
+        }
+      },
+      "default_grill": "mattpocock-1.2.3",
+      "estimate_per_run": {
+        "tokens": 800000,
+        "minutes": 3,
+        "usd_at_api_prices": 1.2
+      },
+      "thresholds": {
+        "score": 0.5,
+        "share": 0.15,
+        "count_relative": 0.25
+      },
+      "rubrics": {
+        "brief": {
+          "goal_captured": "The brief says what is wanted, as the request states it. 5: the goal is unmistakable. 1: the goal is missing or wrong.",
+          "scope_right": "The brief covers the request and no more: nothing dropped, nothing widened. 5: same scope as the request. 1: a different task.",
+          "nothing_invented": "Every statement in the brief comes from the request or from what the user said in the conversation. Open points are left open. 5: nothing added. 1: several invented facts or decisions."
+        },
+        "grill": {
+          "task_quality": "The task file's Spec is something a person could work from: Purpose says who it is for, each Done line can be checked in under a minute, Decided separates stated from assumed, Out of scope is real. 5: ready to work on. 1: vague or wrong."
+        },
+        "work": {
+          "meets_task": "The output does what the task file's Ask and Spec say, Done lines included. 5: every Done line holds. 1: most do not.",
+          "meets_expected": "The output contains everything under 'Must contain' in the expected list and nothing under 'Must not contain'. 5: all of it. 1: most is missing or a 'must not' is present."
+        },
+        "record": {
+          "result_true": "Everything under Result is true of the output files and the conversation: paths exist, figures match the output. 5: all true. 1: describes work that was not done.",
+          "caveats_honest": "Caveats name what was assumed and what could not be checked, and do not say 'None.' when there was something. 5: complete and accurate. 1: missing or misleading."
+        },
+        "end_to_end": {
+          "request_to_done": "Taking the original request and the hidden facts as what the person really wanted: would they accept the final output as it is? 5: yes, as is. 3: after small fixes. 1: no."
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.225,
+      "min": 0.2227,
+      "max": 0.2266,
+      "sd": 0.002
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 23.933,
+      "min": 22.6,
+      "max": 25.3,
+      "sd": 1.35
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 149694.333,
+      "min": 145599.0,
+      "max": 157496.0,
+      "sd": 6759.241
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.0,
+      "min": 3.0,
+      "max": 3.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.23,
+      "min": 0.2257,
+      "max": 0.2342,
+      "sd": 0.004
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 0.933,
+      "min": 0.8,
+      "max": 1.0,
+      "sd": 0.115
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 0.857,
+      "min": 0.8571428571428571,
+      "max": 0.8571428571428571,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 6.333,
+      "min": 6.0,
+      "max": 7.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 47.467,
+      "min": 45.1,
+      "max": 50.5,
+      "sd": 2.761
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 0.944,
+      "min": 0.8333333333333334,
+      "max": 1.0,
+      "sd": 0.096
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 165851.667,
+      "min": 148715.0,
+      "max": 189986.0,
+      "sd": 21506.961
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.091,
+      "min": 0.0816,
+      "max": 0.0978,
+      "sd": 0.008
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 21.833,
+      "min": 18.0,
+      "max": 23.9,
+      "sd": 3.323
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 114214.333,
+      "min": 103786.0,
+      "max": 133291.0,
+      "sd": 16544.833
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.13,
+      "min": 0.1157,
+      "max": 0.1459,
+      "sd": 0.015
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 13.467,
+      "min": 12.0,
+      "max": 16.4,
+      "sd": 2.54
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 113626.667,
+      "min": 90537.0,
+      "max": 157033.0,
+      "sd": 37616.548
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.676,
+      "min": 0.6457,
+      "max": 0.7045,
+      "sd": 0.029
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 106.7,
+      "min": 99.4,
+      "max": 115.8,
+      "sd": 8.347
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 543387.0,
+      "min": 498776.0,
+      "max": 596535.0,
+      "sd": 49435.471
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 532937.667,
+      "min": 489304.0,
+      "max": 584902.0,
+      "sd": 48340.401
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 42.667,
+      "min": 40.0,
+      "max": 46.0,
+      "sd": 3.055
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 10406.667,
+      "min": 9432.0,
+      "max": 11587.0,
+      "sd": 1092.122
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 7.0,
+      "min": 7.0,
+      "max": 7.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.254,
+      "min": 0.2243,
+      "max": 0.3123,
+      "sd": 0.05
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 25.9,
+      "min": 23.6,
+      "max": 30.0,
+      "sd": 3.559
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 159764.667,
+      "min": 145859.0,
+      "max": 187418.0,
+      "sd": 23948.619
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.333,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.216,
+      "min": 0.2127,
+      "max": 0.2196,
+      "sd": 0.004
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 0.867,
+      "min": 0.8,
+      "max": 1.0,
+      "sd": 0.115
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 0.905,
+      "min": 0.8571428571428571,
+      "max": 1.0,
+      "sd": 0.082
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 7.333,
+      "min": 6.0,
+      "max": 8.0,
+      "sd": 1.155
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 2.0,
+      "min": 0.0,
+      "max": 4.0,
+      "sd": 2.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 40.533,
+      "min": 39.5,
+      "max": 42.1,
+      "sd": 1.38
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 0.897,
+      "min": 0.8333333333333334,
+      "max": 1.0,
+      "sd": 0.09
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 3.333,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 157834.333,
+      "min": 157153.0,
+      "max": 158736.0,
+      "sd": 814.176
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.092,
+      "min": 0.0849,
+      "max": 0.0967,
+      "sd": 0.006
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 20.133,
+      "min": 18.4,
+      "max": 21.1,
+      "sd": 1.504
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 139455.667,
+      "min": 128418.0,
+      "max": 157236.0,
+      "sd": 15547.249
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.128,
+      "min": 0.1177,
+      "max": 0.134,
+      "sd": 0.009
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 12.367,
+      "min": 11.8,
+      "max": 13.0,
+      "sd": 0.603
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 102116.0,
+      "min": 89459.0,
+      "max": 122396.0,
+      "sd": 17742.438
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.69,
+      "min": 0.6417,
+      "max": 0.7526,
+      "sd": 0.057
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 98.933,
+      "min": 93.8,
+      "max": 102.9,
+      "sd": 4.661
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 559170.667,
+      "min": 521047.0,
+      "max": 624664.0,
+      "sd": 56973.192
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 549951.0,
+      "min": 512326.0,
+      "max": 615607.0,
+      "sd": 57061.756
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 44.667,
+      "min": 42.0,
+      "max": 50.0,
+      "sd": 4.619
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 9175.0,
+      "min": 8679.0,
+      "max": 9839.0,
+      "sd": 597.97
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 7.333,
+      "min": 7.0,
+      "max": 8.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.278,
+      "min": 0.2084,
+      "max": 0.3189,
+      "sd": 0.061
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 28.4,
+      "min": 22.3,
+      "max": 32.1,
+      "sd": 5.323
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 177081.667,
+      "min": 133876.0,
+      "max": 199504.0,
+      "sd": 37426.178
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.221,
+      "min": 0.2158,
+      "max": 0.2305,
+      "sd": 0.008
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 0.833,
+      "min": 0.8333333333333334,
+      "max": 0.8333333333333334,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 6.0,
+      "min": 5.0,
+      "max": 7.0,
+      "sd": 1.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 0.667,
+      "min": 0.0,
+      "max": 2.0,
+      "sd": 1.155
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 42.467,
+      "min": 41.7,
+      "max": 43.0,
+      "sd": 0.681
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 3.333,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 178183.667,
+      "min": 158082.0,
+      "max": 188986.0,
+      "sd": 17424.767
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.093,
+      "min": 0.085,
+      "max": 0.1033,
+      "sd": 0.009
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 24.2,
+      "min": 20.2,
+      "max": 27.1,
+      "sd": 3.579
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 113326.667,
+      "min": 103215.0,
+      "max": 132501.0,
+      "sd": 16613.741
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.13,
+      "min": 0.1178,
+      "max": 0.1439,
+      "sd": 0.013
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 12.467,
+      "min": 11.3,
+      "max": 13.7,
+      "sd": 1.201
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 102879.0,
+      "min": 89963.0,
+      "max": 127089.0,
+      "sd": 20982.154
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.722,
+      "min": 0.6581,
+      "max": 0.7819,
+      "sd": 0.062
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 4.0,
+      "min": 3.0,
+      "max": 5.0,
+      "sd": 1.0
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 107.533,
+      "min": 102.7,
+      "max": 115.9,
+      "sd": 7.275
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 571471.0,
+      "min": 518711.0,
+      "max": 617176.0,
+      "sd": 49610.169
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 561680.667,
+      "min": 508940.0,
+      "max": 606505.0,
+      "sd": 49261.887
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 46.667,
+      "min": 44.0,
+      "max": 48.0,
+      "sd": 2.309
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 9743.667,
+      "min": 8881.0,
+      "max": 10623.0,
+      "sd": 871.12
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 7.667,
+      "min": 7.0,
+      "max": 8.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.257,
+      "min": 0.2224,
+      "max": 0.3195,
+      "sd": 0.054
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 26.367,
+      "min": 23.2,
+      "max": 29.8,
+      "sd": 3.308
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 165246.667,
+      "min": 145512.0,
+      "max": 203813.0,
+      "sd": 33402.476
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.333,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.316,
+      "min": 0.2323,
+      "max": 0.3771,
+      "sd": 0.075
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 0.933,
+      "min": 0.8,
+      "max": 1.0,
+      "sd": 0.115
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 0.857,
+      "min": 0.7142857142857143,
+      "max": 1.0,
+      "sd": 0.143
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 11.333,
+      "min": 9.0,
+      "max": 13.0,
+      "sd": 2.082
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 0.333,
+      "min": 0.0,
+      "max": 1.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.667,
+      "min": 2.0,
+      "max": 3.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 54.0,
+      "min": 49.8,
+      "max": 59.9,
+      "sd": 5.26
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 0.952,
+      "min": 0.8571428571428571,
+      "max": 1.0,
+      "sd": 0.082
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 201343.0,
+      "min": 159574.0,
+      "max": 239354.0,
+      "sd": 40022.544
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.667,
+      "min": 2.0,
+      "max": 3.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.098,
+      "min": 0.0913,
+      "max": 0.1039,
+      "sd": 0.006
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 21.033,
+      "min": 17.7,
+      "max": 23.5,
+      "sd": 2.996
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 160006.667,
+      "min": 131774.0,
+      "max": 189901.0,
+      "sd": 29099.105
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.133,
+      "min": 0.1273,
+      "max": 0.1407,
+      "sd": 0.007
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 12.333,
+      "min": 12.1,
+      "max": 12.6,
+      "sd": 0.252
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 104423.333,
+      "min": 93215.0,
+      "max": 126312.0,
+      "sd": 18957.98
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.804,
+      "min": 0.6733,
+      "max": 0.8868,
+      "sd": 0.114
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 113.733,
+      "min": 103.0,
+      "max": 121.6,
+      "sd": 9.626
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 631019.667,
+      "min": 530603.0,
+      "max": 701982.0,
+      "sd": 89405.586
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 620335.333,
+      "min": 520251.0,
+      "max": 690505.0,
+      "sd": 88981.861
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 49.333,
+      "min": 42.0,
+      "max": 54.0,
+      "sd": 6.429
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 10635.0,
+      "min": 10172.0,
+      "max": 11423.0,
+      "sd": 685.907
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 8.0,
+      "min": 7.0,
+      "max": 9.0,
+      "sd": 1.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.252,
+      "min": 0.219,
+      "max": 0.3141,
+      "sd": 0.054
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 25.867,
+      "min": 23.1,
+      "max": 31.2,
+      "sd": 4.62
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 163064.0,
+      "min": 145448.0,
+      "max": 187449.0,
+      "sd": 21803.337
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.333,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.357,
+      "min": 0.3421,
+      "max": 0.376,
+      "sd": 0.017
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 0.933,
+      "min": 0.8,
+      "max": 1.0,
+      "sd": 0.115
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 0.905,
+      "min": 0.7142857142857143,
+      "max": 1.0,
+      "sd": 0.165
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 11.0,
+      "min": 9.0,
+      "max": 13.0,
+      "sd": 2.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 0.667,
+      "min": 0.0,
+      "max": 2.0,
+      "sd": 1.155
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 3.0,
+      "min": 3.0,
+      "max": 3.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 61.033,
+      "min": 54.2,
+      "max": 66.3,
+      "sd": 6.2
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 222456.333,
+      "min": 196573.0,
+      "max": 237684.0,
+      "sd": 22531.889
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.0,
+      "min": 3.0,
+      "max": 3.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.079,
+      "min": 0.0743,
+      "max": 0.0832,
+      "sd": 0.004
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 17.1,
+      "min": 15.2,
+      "max": 18.5,
+      "sd": 1.706
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 101594.667,
+      "min": 100023.0,
+      "max": 103451.0,
+      "sd": 1731.639
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.113,
+      "min": 0.1035,
+      "max": 0.1192,
+      "sd": 0.008
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 11.933,
+      "min": 10.4,
+      "max": 13.6,
+      "sd": 1.604
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 98945.0,
+      "min": 86739.0,
+      "max": 119841.0,
+      "sd": 18181.658
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.801,
+      "min": 0.7433,
+      "max": 0.8657,
+      "sd": 0.061
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 115.933,
+      "min": 102.9,
+      "max": 125.0,
+      "sd": 11.572
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 586060.0,
+      "min": 566609.0,
+      "max": 603886.0,
+      "sd": 18691.553
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 575815.333,
+      "min": 557845.0,
+      "max": 592620.0,
+      "sd": 17416.78
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 47.333,
+      "min": 46.0,
+      "max": 50.0,
+      "sd": 2.309
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 10197.333,
+      "min": 8718.0,
+      "max": 11216.0,
+      "sd": 1311.168
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 8.333,
+      "min": 8.0,
+      "max": 9.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.255,
+      "min": 0.2257,
+      "max": 0.2993,
+      "sd": 0.039
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 27.133,
+      "min": 23.7,
+      "max": 32.7,
+      "sd": 4.864
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 168621.667,
+      "min": 157208.0,
+      "max": 183475.0,
+      "sd": 13467.082
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.333,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.214,
+      "min": 0.2102,
+      "max": 0.2171,
+      "sd": 0.003
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 6.333,
+      "min": 5.0,
+      "max": 7.0,
+      "sd": 1.155
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 4.0,
+      "min": 3.0,
+      "max": 5.0,
+      "sd": 1.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 40.3,
+      "min": 38.7,
+      "max": 41.5,
+      "sd": 1.442
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 157194.333,
+      "min": 156621.0,
+      "max": 158049.0,
+      "sd": 754.425
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.074,
+      "min": 0.0726,
+      "max": 0.0764,
+      "sd": 0.002
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 13.733,
+      "min": 12.5,
+      "max": 15.0,
+      "sd": 1.25
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 102241.333,
+      "min": 101695.0,
+      "max": 102594.0,
+      "sd": 479.771
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.107,
+      "min": 0.1056,
+      "max": 0.109,
+      "sd": 0.002
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 12.2,
+      "min": 11.6,
+      "max": 13.3,
+      "sd": 0.954
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 88411.333,
+      "min": 87857.0,
+      "max": 88822.0,
+      "sd": 498.283
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.651,
+      "min": 0.6212,
+      "max": 0.6936,
+      "sd": 0.038
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 93.367,
+      "min": 89.3,
+      "max": 98.4,
+      "sd": 4.626
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 516468.667,
+      "min": 506673.0,
+      "max": 531086.0,
+      "sd": 12900.969
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 508328.333,
+      "min": 498789.0,
+      "max": 522910.0,
+      "sd": 12826.711
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 43.333,
+      "min": 40.0,
+      "max": 46.0,
+      "sd": 3.055
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 8097.0,
+      "min": 7844.0,
+      "max": 8315.0,
+      "sd": 237.443
+    },
+    {
+      "scenario": "06-facilities-report",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 7.333,
+      "min": 7.0,
+      "max": 8.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.248,
+      "min": 0.2093,
+      "max": 0.311,
+      "sd": 0.055
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 25.267,
+      "min": 21.6,
+      "max": 30.8,
+      "sd": 4.876
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 159432.0,
+      "min": 133974.0,
+      "max": 187144.0,
+      "sd": 26656.568
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.333,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.283,
+      "min": 0.2065,
+      "max": 0.3345,
+      "sd": 0.068
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 6.667,
+      "min": 6.0,
+      "max": 8.0,
+      "sd": 1.155
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.667,
+      "min": 2.0,
+      "max": 3.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 45.833,
+      "min": 38.6,
+      "max": 52.6,
+      "sd": 7.012
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 179430.667,
+      "min": 154787.0,
+      "max": 201298.0,
+      "sd": 23379.463
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.667,
+      "min": 2.0,
+      "max": 3.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.07,
+      "min": 0.0681,
+      "max": 0.0709,
+      "sd": 0.001
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 13.3,
+      "min": 13.1,
+      "max": 13.4,
+      "sd": 0.173
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 101059.0,
+      "min": 100913.0,
+      "max": 101136.0,
+      "sd": 126.503
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.1,
+      "min": 0.0973,
+      "max": 0.103,
+      "sd": 0.003
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 10.767,
+      "min": 10.3,
+      "max": 11.3,
+      "sd": 0.503
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 86364.667,
+      "min": 85952.0,
+      "max": 86655.0,
+      "sd": 367.119
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.702,
+      "min": 0.5897,
+      "max": 0.7856,
+      "sd": 0.101
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 95.167,
+      "min": 84.6,
+      "max": 100.8,
+      "sd": 9.158
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 526286.333,
+      "min": 476552.0,
+      "max": 575307.0,
+      "sd": 49381.368
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 518419.0,
+      "min": 469230.0,
+      "max": 567831.0,
+      "sd": 49300.878
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 44.0,
+      "min": 40.0,
+      "max": 48.0,
+      "sd": 4.0
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 7823.333,
+      "min": 7282.0,
+      "max": 8760.0,
+      "sd": 814.455
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 8.0,
+      "min": 7.0,
+      "max": 9.0,
+      "sd": 1.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.285,
+      "min": 0.2282,
+      "max": 0.3845,
+      "sd": 0.087
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 29.267,
+      "min": 24.2,
+      "max": 38.3,
+      "sd": 7.842
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 202515.0,
+      "min": 182081.0,
+      "max": 219285.0,
+      "sd": 18870.694
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 5.0,
+      "sd": 1.155
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.206,
+      "min": 0.1961,
+      "max": 0.2204,
+      "sd": 0.013
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 0.867,
+      "min": 0.8,
+      "max": 1.0,
+      "sd": 0.115
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 0.667,
+      "min": 0.0,
+      "max": 2.0,
+      "sd": 1.155
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 35.5,
+      "min": 33.8,
+      "max": 38.8,
+      "sd": 2.858
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 0.85,
+      "min": 0.75,
+      "max": 1.0,
+      "sd": 0.132
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 162431.667,
+      "min": 145860.0,
+      "max": 184903.0,
+      "sd": 20179.036
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.071,
+      "min": 0.0671,
+      "max": 0.0747,
+      "sd": 0.004
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 12.133,
+      "min": 10.8,
+      "max": 13.5,
+      "sd": 1.35
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 111181.0,
+      "min": 101513.0,
+      "max": 127915.0,
+      "sd": 14550.349
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 3.667,
+      "min": 3.0,
+      "max": 4.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.103,
+      "min": 0.0958,
+      "max": 0.1079,
+      "sd": 0.006
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 11.433,
+      "min": 10.3,
+      "max": 12.7,
+      "sd": 1.206
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 106203.0,
+      "min": 85631.0,
+      "max": 117709.0,
+      "sd": 17857.597
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.664,
+      "min": 0.6056,
+      "max": 0.7565,
+      "sd": 0.081
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 88.333,
+      "min": 80.2,
+      "max": 97.0,
+      "sd": 8.413
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 582330.667,
+      "min": 549855.0,
+      "max": 608329.0,
+      "sd": 29770.271
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 575239.667,
+      "min": 543511.0,
+      "max": 601012.0,
+      "sd": 29209.582
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 48.0,
+      "min": 44.0,
+      "max": 54.0,
+      "sd": 5.292
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 7043.0,
+      "min": 6300.0,
+      "max": 7566.0,
+      "sd": 661.051
+    },
+    {
+      "scenario": "08-update-price-list",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 7.667,
+      "min": 7.0,
+      "max": 9.0,
+      "sd": 1.155
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.227,
+      "min": 0.2253,
+      "max": 0.2282,
+      "sd": 0.002
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 23.8,
+      "min": 22.7,
+      "max": 24.7,
+      "sd": 1.015
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 157912.667,
+      "min": 157261.0,
+      "max": 158907.0,
+      "sd": 874.868
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.0,
+      "min": 3.0,
+      "max": 3.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.247,
+      "min": 0.2135,
+      "max": 0.3151,
+      "sd": 0.059
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 0.889,
+      "min": 0.6666666666666666,
+      "max": 1.0,
+      "sd": 0.192
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 7.0,
+      "min": 6.0,
+      "max": 8.0,
+      "sd": 1.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 2.333,
+      "min": 1.0,
+      "max": 4.0,
+      "sd": 1.528
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.333,
+      "min": 2.0,
+      "max": 3.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 42.367,
+      "min": 38.5,
+      "max": 45.9,
+      "sd": 3.711
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 161770.333,
+      "min": 147019.0,
+      "max": 190904.0,
+      "sd": 25231.17
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.333,
+      "min": 2.0,
+      "max": 3.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.078,
+      "min": 0.0717,
+      "max": 0.0839,
+      "sd": 0.006
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 15.133,
+      "min": 12.8,
+      "max": 17.0,
+      "sd": 2.139
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 120268.0,
+      "min": 101904.0,
+      "max": 130145.0,
+      "sd": 15918.869
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.114,
+      "min": 0.1053,
+      "max": 0.1197,
+      "sd": 0.007
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 12.1,
+      "min": 11.6,
+      "max": 12.8,
+      "sd": 0.624
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 109351.0,
+      "min": 88123.0,
+      "max": 121036.0,
+      "sd": 18415.158
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.666,
+      "min": 0.6181,
+      "max": 0.7353,
+      "sd": 0.061
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 93.4,
+      "min": 87.9,
+      "max": 98.3,
+      "sd": 5.226
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 549302.0,
+      "min": 494985.0,
+      "max": 595814.0,
+      "sd": 50865.61
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 540884.667,
+      "min": 487027.0,
+      "max": 587669.0,
+      "sd": 50692.476
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 44.667,
+      "min": 40.0,
+      "max": 48.0,
+      "sd": 4.163
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 8372.667,
+      "min": 7918.0,
+      "max": 9103.0,
+      "sd": 638.788
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 7.333,
+      "min": 7.0,
+      "max": 8.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.213,
+      "min": 0.2073,
+      "max": 0.2237,
+      "sd": 0.009
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 22.867,
+      "min": 22.0,
+      "max": 24.1,
+      "sd": 1.097
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 141479.0,
+      "min": 133661.0,
+      "max": 157030.0,
+      "sd": 13467.628
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "brief",
+      "metric": "turns",
+      "n": 3,
+      "mean": 3.0,
+      "min": 3.0,
+      "max": 3.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.221,
+      "min": 0.2159,
+      "max": 0.2291,
+      "sd": 0.007
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "questions",
+      "n": 3,
+      "mean": 7.333,
+      "min": 4.0,
+      "max": 12.0,
+      "sd": 4.163
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 3,
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 39.9,
+      "min": 39.2,
+      "max": 41.2,
+      "sd": 1.127
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 3,
+      "mean": 4.0,
+      "min": 4.0,
+      "max": 4.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 154171.333,
+      "min": 147004.0,
+      "max": 158663.0,
+      "sd": 6273.154
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "grill",
+      "metric": "turns",
+      "n": 3,
+      "mean": 2.0,
+      "min": 2.0,
+      "max": 2.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "work",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.078,
+      "min": 0.0774,
+      "max": 0.0786,
+      "sd": 0.001
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 3,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "work",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 16.0,
+      "min": 15.6,
+      "max": 16.3,
+      "sd": 0.361
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "work",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 102807.0,
+      "min": 102617.0,
+      "max": 102977.0,
+      "sd": 180.831
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "work",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 3,
+      "mean": 4.333,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.577
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "record",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.111,
+      "min": 0.1105,
+      "max": 0.1127,
+      "sd": 0.001
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "record",
+      "metric": "result_true",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "record",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 11.4,
+      "min": 11.1,
+      "max": 11.7,
+      "sd": 0.3
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "record",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 89112.333,
+      "min": 88981.0,
+      "max": 89343.0,
+      "sd": 200.403
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "record",
+      "metric": "turns",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 3,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 3,
+      "mean": 0.624,
+      "min": 0.6121,
+      "max": 0.6344,
+      "sd": 0.011
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 3,
+      "mean": 5.0,
+      "min": 5.0,
+      "max": 5.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 3,
+      "mean": 90.167,
+      "min": 88.5,
+      "max": 91.0,
+      "sd": 1.443
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 3,
+      "mean": 487569.667,
+      "min": 482223.0,
+      "max": 496354.0,
+      "sd": 7667.102
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 3,
+      "mean": 479085.667,
+      "min": 474118.0,
+      "max": 487718.0,
+      "sd": 7504.155
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 3,
+      "mean": 40.0,
+      "min": 40.0,
+      "max": 40.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 3,
+      "mean": 8444.0,
+      "min": 8065.0,
+      "max": 8671.0,
+      "sd": 330.359
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 3,
+      "mean": 7.0,
+      "min": 7.0,
+      "max": 7.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "completed",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "cost_usd",
+      "n": 10,
+      "mean": 0.249,
+      "min": 0.213,
+      "max": 0.285,
+      "sd": 0.023
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "goal_captured",
+      "n": 10,
+      "mean": 4.9,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.316
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "layout_share",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "nothing_invented",
+      "n": 10,
+      "mean": 4.767,
+      "min": 4.333,
+      "max": 5.0,
+      "sd": 0.275
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "scope_right",
+      "n": 10,
+      "mean": 4.967,
+      "min": 4.667,
+      "max": 5.0,
+      "sd": 0.105
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "seconds",
+      "n": 10,
+      "mean": 25.88,
+      "min": 22.867,
+      "max": 29.267,
+      "sd": 2.033
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "tokens",
+      "n": 10,
+      "mean": 164481.167,
+      "min": 141479.0,
+      "max": 202515.0,
+      "sd": 16545.284
+    },
+    {
+      "scenario": "ALL",
+      "step": "brief",
+      "metric": "turns",
+      "n": 10,
+      "mean": 3.3,
+      "min": 3.0,
+      "max": 3.667,
+      "sd": 0.246
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "completed",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "cost_usd",
+      "n": 10,
+      "mean": 0.251,
+      "min": 0.206,
+      "max": 0.357,
+      "sd": 0.051
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "essential_share",
+      "n": 10,
+      "mean": 0.967,
+      "min": 0.867,
+      "max": 1.0,
+      "sd": 0.047
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "facts_share",
+      "n": 10,
+      "mean": 0.911,
+      "min": 0.833,
+      "max": 1.0,
+      "sd": 0.065
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "layout_share",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "questions",
+      "n": 10,
+      "mean": 7.367,
+      "min": 4.333,
+      "max": 11.333,
+      "sd": 2.18
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "questions_docs_answer",
+      "n": 10,
+      "mean": 1.067,
+      "min": 0.0,
+      "max": 4.0,
+      "sd": 1.313
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "rounds",
+      "n": 10,
+      "mean": 2.267,
+      "min": 2.0,
+      "max": 3.0,
+      "sd": 0.379
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "seconds",
+      "n": 10,
+      "mean": 44.94,
+      "min": 35.5,
+      "max": 61.033,
+      "sd": 7.575
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "stated_share",
+      "n": 10,
+      "mean": 0.964,
+      "min": 0.85,
+      "max": 1.0,
+      "sd": 0.054
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "task_quality",
+      "n": 10,
+      "mean": 3.767,
+      "min": 3.333,
+      "max": 4.0,
+      "sd": 0.275
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "tokens",
+      "n": 10,
+      "mean": 174066.733,
+      "min": 154171.333,
+      "max": 222456.333,
+      "sd": 22184.399
+    },
+    {
+      "scenario": "ALL",
+      "step": "grill",
+      "metric": "turns",
+      "n": 10,
+      "mean": 2.267,
+      "min": 2.0,
+      "max": 3.0,
+      "sd": 0.379
+    },
+    {
+      "scenario": "ALL",
+      "step": "work",
+      "metric": "completed",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "work",
+      "metric": "cost_usd",
+      "n": 10,
+      "mean": 0.082,
+      "min": 0.07,
+      "max": 0.098,
+      "sd": 0.01
+    },
+    {
+      "scenario": "ALL",
+      "step": "work",
+      "metric": "meets_expected",
+      "n": 10,
+      "mean": 4.667,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.416
+    },
+    {
+      "scenario": "ALL",
+      "step": "work",
+      "metric": "meets_task",
+      "n": 10,
+      "mean": 4.533,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.358
+    },
+    {
+      "scenario": "ALL",
+      "step": "work",
+      "metric": "seconds",
+      "n": 10,
+      "mean": 17.46,
+      "min": 12.133,
+      "max": 24.2,
+      "sd": 4.106
+    },
+    {
+      "scenario": "ALL",
+      "step": "work",
+      "metric": "tokens",
+      "n": 10,
+      "mean": 116615.433,
+      "min": 101059.0,
+      "max": 160006.667,
+      "sd": 19232.047
+    },
+    {
+      "scenario": "ALL",
+      "step": "work",
+      "metric": "turns",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "record",
+      "metric": "caveats_honest",
+      "n": 10,
+      "mean": 3.933,
+      "min": 3.667,
+      "max": 4.333,
+      "sd": 0.263
+    },
+    {
+      "scenario": "ALL",
+      "step": "record",
+      "metric": "checks_share",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "record",
+      "metric": "completed",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "record",
+      "metric": "cost_usd",
+      "n": 10,
+      "mean": 0.117,
+      "min": 0.1,
+      "max": 0.133,
+      "sd": 0.012
+    },
+    {
+      "scenario": "ALL",
+      "step": "record",
+      "metric": "result_true",
+      "n": 10,
+      "mean": 4.567,
+      "min": 4.0,
+      "max": 5.0,
+      "sd": 0.353
+    },
+    {
+      "scenario": "ALL",
+      "step": "record",
+      "metric": "seconds",
+      "n": 10,
+      "mean": 12.047,
+      "min": 10.767,
+      "max": 13.467,
+      "sd": 0.734
+    },
+    {
+      "scenario": "ALL",
+      "step": "record",
+      "metric": "tokens",
+      "n": 10,
+      "mean": 100143.233,
+      "min": 86364.667,
+      "max": 113626.667,
+      "sd": 9330.982
+    },
+    {
+      "scenario": "ALL",
+      "step": "record",
+      "metric": "turns",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "completed",
+      "n": 10,
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "sd": 0.0
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "cost_usd",
+      "n": 10,
+      "mean": 0.7,
+      "min": 0.624,
+      "max": 0.804,
+      "sd": 0.06
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "request_to_done",
+      "n": 10,
+      "mean": 4.5,
+      "min": 3.667,
+      "max": 5.0,
+      "sd": 0.478
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "seconds",
+      "n": 10,
+      "mean": 100.327,
+      "min": 88.333,
+      "max": 115.933,
+      "sd": 9.932
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "tokens",
+      "n": 10,
+      "mean": 555306.567,
+      "min": 487569.667,
+      "max": 631019.667,
+      "sd": 40554.14
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "tokens_cached",
+      "n": 10,
+      "mean": 546267.733,
+      "min": 479085.667,
+      "max": 620335.333,
+      "sd": 39978.628
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "tokens_input",
+      "n": 10,
+      "mean": 45.067,
+      "min": 40.0,
+      "max": 49.333,
+      "sd": 2.797
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "tokens_output",
+      "n": 10,
+      "mean": 8993.767,
+      "min": 7043.0,
+      "max": 10635.0,
+      "sd": 1220.26
+    },
+    {
+      "scenario": "ALL",
+      "step": "end_to_end",
+      "metric": "turns",
+      "n": 10,
+      "mean": 7.567,
+      "min": 7.0,
+      "max": 8.333,
+      "sd": 0.446
+    }
+  ],
+  "runs": [
+    {
+      "scenario": "01-supplier-memo",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.3373,
+      "judge_tokens": 77968,
+      "tokens_split": {
+        "tokens": 612818,
+        "tokens_input": 52,
+        "tokens_cached": 598693,
+        "tokens_output": 14073
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 145988,
+          "cost_usd": 0.226,
+          "seconds": 23.9,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 189986,
+          "cost_usd": 0.2315,
+          "seconds": 45.1,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 0.8571428571428571,
+          "stated_share": 1.0,
+          "questions": 6,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 105566,
+          "cost_usd": 0.0928,
+          "seconds": 23.9,
+          "meets_task": 4,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 93310,
+          "cost_usd": 0.1285,
+          "seconds": 12.0,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6788,
+          "seconds": 104.9,
+          "tokens": 534850,
+          "tokens_input": 42,
+          "tokens_cached": 524607,
+          "tokens_output": 10201,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.3485,
+      "judge_tokens": 79390,
+      "tokens_split": {
+        "tokens": 675925,
+        "tokens_input": 56,
+        "tokens_cached": 660424,
+        "tokens_output": 15445
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 157496,
+          "cost_usd": 0.2266,
+          "seconds": 25.3,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 148715,
+          "cost_usd": 0.2342,
+          "seconds": 50.5,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 0.8,
+          "facts_share": 0.8571428571428571,
+          "stated_share": 0.8333333333333334,
+          "questions": 7,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 133291,
+          "cost_usd": 0.0978,
+          "seconds": 23.6,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 157033,
+          "cost_usd": 0.1459,
+          "seconds": 16.4,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.7045,
+          "seconds": 115.8,
+          "tokens": 596535,
+          "tokens_input": 46,
+          "tokens_cached": 584902,
+          "tokens_output": 11587,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "01-supplier-memo",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.3233,
+      "judge_tokens": 76778,
+      "tokens_split": {
+        "tokens": 575554,
+        "tokens_input": 50,
+        "tokens_cached": 562567,
+        "tokens_output": 12937
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 145599,
+          "cost_usd": 0.2227,
+          "seconds": 22.6,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 158854,
+          "cost_usd": 0.2257,
+          "seconds": 46.8,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 0.8571428571428571,
+          "stated_share": 1.0,
+          "questions": 6,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 103786,
+          "cost_usd": 0.0816,
+          "seconds": 18.0,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 90537,
+          "cost_usd": 0.1157,
+          "seconds": 12.0,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6457,
+          "seconds": 99.4,
+          "tokens": 498776,
+          "tokens_input": 40,
+          "tokens_cached": 489304,
+          "tokens_output": 9432,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.2948,
+      "judge_tokens": 63708,
+      "tokens_split": {
+        "tokens": 584755,
+        "tokens_input": 52,
+        "tokens_cached": 572685,
+        "tokens_output": 12018
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 146017,
+          "cost_usd": 0.2264,
+          "seconds": 23.6,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 157153,
+          "cost_usd": 0.2127,
+          "seconds": 40.0,
+          "layout_share": 1.0,
+          "task_quality": 3,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 0.8571428571428571,
+          "questions": 8,
+          "questions_docs_answer": 4,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 128418,
+          "cost_usd": 0.0849,
+          "seconds": 18.4,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 89459,
+          "cost_usd": 0.1177,
+          "seconds": 11.8,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6417,
+          "seconds": 93.8,
+          "tokens": 521047,
+          "tokens_input": 42,
+          "tokens_cached": 512326,
+          "tokens_output": 8679,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.2916,
+      "judge_tokens": 62790,
+      "tokens_split": {
+        "tokens": 687454,
+        "tokens_input": 60,
+        "tokens_cached": 674701,
+        "tokens_output": 12693
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 4,
+          "tokens": 187418,
+          "cost_usd": 0.3123,
+          "seconds": 30.0,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 157614,
+          "cost_usd": 0.2147,
+          "seconds": 39.5,
+          "layout_share": 1.0,
+          "task_quality": 3,
+          "essential_share": 0.8,
+          "facts_share": 0.8571428571428571,
+          "stated_share": 0.8333333333333334,
+          "questions": 6,
+          "questions_docs_answer": 2,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 157236,
+          "cost_usd": 0.0948,
+          "seconds": 21.1,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 122396,
+          "cost_usd": 0.1308,
+          "seconds": 12.3,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.7526,
+          "seconds": 102.9,
+          "tokens": 624664,
+          "tokens_input": 50,
+          "tokens_cached": 615607,
+          "tokens_output": 9007,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "02-travel-cost-check",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.3177,
+      "judge_tokens": 75525,
+      "tokens_split": {
+        "tokens": 607326,
+        "tokens_input": 52,
+        "tokens_cached": 593563,
+        "tokens_output": 13711
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 145859,
+          "cost_usd": 0.2243,
+          "seconds": 24.1,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 158736,
+          "cost_usd": 0.2196,
+          "seconds": 42.1,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 0.8,
+          "facts_share": 0.8571428571428571,
+          "stated_share": 1.0,
+          "questions": 8,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 132713,
+          "cost_usd": 0.0967,
+          "seconds": 20.9,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 94493,
+          "cost_usd": 0.134,
+          "seconds": 13.0,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 3
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6746,
+          "seconds": 100.1,
+          "tokens": 531801,
+          "tokens_input": 42,
+          "tokens_cached": 521920,
+          "tokens_output": 9839,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.2976,
+      "judge_tokens": 54429,
+      "tokens_split": {
+        "tokens": 573140,
+        "tokens_input": 54,
+        "tokens_cached": 560105,
+        "tokens_output": 12981
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 133876,
+          "cost_usd": 0.2084,
+          "seconds": 22.3,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 188986,
+          "cost_usd": 0.2305,
+          "seconds": 42.7,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 0.8333333333333334,
+          "stated_share": 1.0,
+          "questions": 6,
+          "questions_docs_answer": 2,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 104264,
+          "cost_usd": 0.0919,
+          "seconds": 25.3,
+          "meets_task": 5,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 91585,
+          "cost_usd": 0.1273,
+          "seconds": 12.4,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6581,
+          "seconds": 102.7,
+          "tokens": 518711,
+          "tokens_input": 44,
+          "tokens_cached": 508940,
+          "tokens_output": 9727,
+          "request_to_done": 3
+        }
+      }
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.3494,
+      "judge_tokens": 79305,
+      "tokens_split": {
+        "tokens": 696481,
+        "tokens_input": 58,
+        "tokens_cached": 681805,
+        "tokens_output": 14618
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 4,
+          "tokens": 199504,
+          "cost_usd": 0.3189,
+          "seconds": 32.1,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 158082,
+          "cost_usd": 0.2158,
+          "seconds": 43.0,
+          "layout_share": 1.0,
+          "task_quality": 3,
+          "essential_share": 1.0,
+          "facts_share": 0.8333333333333334,
+          "stated_share": 1.0,
+          "questions": 5,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 132501,
+          "cost_usd": 0.1033,
+          "seconds": 27.1,
+          "meets_task": 4,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 127089,
+          "cost_usd": 0.1439,
+          "seconds": 13.7,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 3
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.7819,
+          "seconds": 115.9,
+          "tokens": 617176,
+          "tokens_input": 48,
+          "tokens_cached": 606505,
+          "tokens_output": 10623,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "03-kickoff-deck-review",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.2996,
+      "judge_tokens": 64089,
+      "tokens_split": {
+        "tokens": 642615,
+        "tokens_input": 58,
+        "tokens_cached": 630191,
+        "tokens_output": 12366
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 4,
+          "tokens": 197865,
+          "cost_usd": 0.3068,
+          "seconds": 30.8,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 187483,
+          "cost_usd": 0.217,
+          "seconds": 41.7,
+          "layout_share": 1.0,
+          "task_quality": 3,
+          "essential_share": 1.0,
+          "facts_share": 0.8333333333333334,
+          "stated_share": 1.0,
+          "questions": 7,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 103215,
+          "cost_usd": 0.085,
+          "seconds": 20.2,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 89963,
+          "cost_usd": 0.1178,
+          "seconds": 11.3,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.7266,
+          "seconds": 104.0,
+          "tokens": 578526,
+          "tokens_input": 48,
+          "tokens_cached": 569597,
+          "tokens_output": 8881,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.3436,
+      "judge_tokens": 78141,
+      "tokens_split": {
+        "tokens": 738615,
+        "tokens_input": 62,
+        "tokens_cached": 724096,
+        "tokens_output": 14457
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 4,
+          "tokens": 203813,
+          "cost_usd": 0.3195,
+          "seconds": 29.8,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 205101,
+          "cost_usd": 0.3374,
+          "seconds": 52.3,
+          "layout_share": 1.0,
+          "task_quality": 3,
+          "essential_share": 0.8,
+          "facts_share": 0.7142857142857143,
+          "stated_share": 1.0,
+          "questions": 13,
+          "questions_docs_answer": 1,
+          "rounds": 3
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 158345,
+          "cost_usd": 0.0976,
+          "seconds": 21.9,
+          "meets_task": 4,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 93215,
+          "cost_usd": 0.1323,
+          "seconds": 12.6,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 9,
+          "cost_usd": 0.8868,
+          "seconds": 116.6,
+          "tokens": 660474,
+          "tokens_input": 52,
+          "tokens_cached": 650250,
+          "tokens_output": 10172,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.3444,
+      "judge_tokens": 78359,
+      "tokens_split": {
+        "tokens": 608962,
+        "tokens_input": 52,
+        "tokens_cached": 594391,
+        "tokens_output": 14519
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 145512,
+          "cost_usd": 0.2224,
+          "seconds": 23.2,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 159574,
+          "cost_usd": 0.2323,
+          "seconds": 49.8,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 0.8571428571428571,
+          "stated_share": 1.0,
+          "questions": 12,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 131774,
+          "cost_usd": 0.0913,
+          "seconds": 17.7,
+          "meets_task": 4,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 93743,
+          "cost_usd": 0.1273,
+          "seconds": 12.3,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6733,
+          "seconds": 103.0,
+          "tokens": 530603,
+          "tokens_input": 42,
+          "tokens_cached": 520251,
+          "tokens_output": 10310,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "04-signup-dedupe-script",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.352,
+      "judge_tokens": 78988,
+      "tokens_split": {
+        "tokens": 780970,
+        "tokens_input": 64,
+        "tokens_cached": 765064,
+        "tokens_output": 15842
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 146415,
+          "cost_usd": 0.2295,
+          "seconds": 26.1,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 239354,
+          "cost_usd": 0.3771,
+          "seconds": 59.9,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 0.8571428571428571,
+          "questions": 9,
+          "questions_docs_answer": 0,
+          "rounds": 3
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 189901,
+          "cost_usd": 0.1039,
+          "seconds": 23.5,
+          "meets_task": 4,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 126312,
+          "cost_usd": 0.1407,
+          "seconds": 12.1,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 3
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.8512,
+          "seconds": 121.6,
+          "tokens": 701982,
+          "tokens_input": 54,
+          "tokens_cached": 690505,
+          "tokens_output": 11423,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.3087,
+      "judge_tokens": 54920,
+      "tokens_split": {
+        "tokens": 642605,
+        "tokens_input": 56,
+        "tokens_cached": 628039,
+        "tokens_output": 14510
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 156295,
+          "cost_usd": 0.219,
+          "seconds": 23.3,
+          "layout_share": 1.0,
+          "goal_captured": 4,
+          "scope_right": 5,
+          "nothing_invented": 4
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 237684,
+          "cost_usd": 0.376,
+          "seconds": 66.3,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 13,
+          "questions_docs_answer": 0,
+          "rounds": 3
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 103451,
+          "cost_usd": 0.0832,
+          "seconds": 18.5,
+          "meets_task": 5,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 90255,
+          "cost_usd": 0.116,
+          "seconds": 11.8,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.7942,
+          "seconds": 119.9,
+          "tokens": 587685,
+          "tokens_input": 46,
+          "tokens_cached": 576981,
+          "tokens_output": 10658,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.3258,
+      "judge_tokens": 86179,
+      "tokens_split": {
+        "tokens": 652788,
+        "tokens_input": 56,
+        "tokens_cached": 640069,
+        "tokens_output": 12663
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 145448,
+          "cost_usd": 0.2234,
+          "seconds": 23.1,
+          "layout_share": 1.0,
+          "goal_captured": 4,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 233112,
+          "cost_usd": 0.3421,
+          "seconds": 54.2,
+          "layout_share": 1.0,
+          "task_quality": 3,
+          "essential_share": 0.8,
+          "facts_share": 0.7142857142857143,
+          "stated_share": 1.0,
+          "questions": 9,
+          "questions_docs_answer": 0,
+          "rounds": 3
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 101310,
+          "cost_usd": 0.0743,
+          "seconds": 15.2,
+          "meets_task": 4,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 86739,
+          "cost_usd": 0.1035,
+          "seconds": 10.4,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.7433,
+          "seconds": 102.9,
+          "tokens": 566609,
+          "tokens_input": 46,
+          "tokens_cached": 557845,
+          "tokens_output": 8718,
+          "request_to_done": 3
+        }
+      }
+    },
+    {
+      "scenario": "05-vague-onboarding",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.3544,
+      "judge_tokens": 89418,
+      "tokens_split": {
+        "tokens": 693304,
+        "tokens_input": 60,
+        "tokens_cached": 677865,
+        "tokens_output": 15379
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 4,
+          "tokens": 187449,
+          "cost_usd": 0.3141,
+          "seconds": 31.2,
+          "layout_share": 1.0,
+          "goal_captured": 4,
+          "scope_right": 4,
+          "nothing_invented": 4
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 196573,
+          "cost_usd": 0.3532,
+          "seconds": 62.6,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 11,
+          "questions_docs_answer": 2,
+          "rounds": 3
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 100023,
+          "cost_usd": 0.0792,
+          "seconds": 17.6,
+          "meets_task": 5,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 119841,
+          "cost_usd": 0.1192,
+          "seconds": 13.6,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 9,
+          "cost_usd": 0.8657,
+          "seconds": 125.0,
+          "tokens": 603886,
+          "tokens_input": 50,
+          "tokens_cached": 592620,
+          "tokens_output": 11216,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "06-facilities-report",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.2952,
+      "judge_tokens": 73541,
+      "tokens_split": {
+        "tokens": 604627,
+        "tokens_input": 54,
+        "tokens_cached": 593125,
+        "tokens_output": 11448
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 183475,
+          "cost_usd": 0.2414,
+          "seconds": 25.0,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 156621,
+          "cost_usd": 0.2102,
+          "seconds": 40.7,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 5,
+          "questions_docs_answer": 5,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 102435,
+          "cost_usd": 0.0764,
+          "seconds": 15.0,
+          "meets_task": 4,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 88555,
+          "cost_usd": 0.109,
+          "seconds": 11.7,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 5
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.637,
+          "seconds": 92.4,
+          "tokens": 531086,
+          "tokens_input": 44,
+          "tokens_cached": 522910,
+          "tokens_output": 8132,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "06-facilities-report",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.2991,
+      "judge_tokens": 74090,
+      "tokens_split": {
+        "tokens": 580763,
+        "tokens_input": 50,
+        "tokens_cached": 569589,
+        "tokens_output": 11124
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 157208,
+          "cost_usd": 0.2257,
+          "seconds": 23.7,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 4
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 158049,
+          "cost_usd": 0.2171,
+          "seconds": 41.5,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 7,
+          "questions_docs_answer": 4,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 102594,
+          "cost_usd": 0.0728,
+          "seconds": 12.5,
+          "meets_task": 5,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 88822,
+          "cost_usd": 0.1056,
+          "seconds": 11.6,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6212,
+          "seconds": 89.3,
+          "tokens": 506673,
+          "tokens_input": 40,
+          "tokens_cached": 498789,
+          "tokens_output": 7844,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "06-facilities-report",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.31,
+      "judge_tokens": 85406,
+      "tokens_split": {
+        "tokens": 597053,
+        "tokens_input": 56,
+        "tokens_cached": 585543,
+        "tokens_output": 11454
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 4,
+          "tokens": 165182,
+          "cost_usd": 0.2993,
+          "seconds": 32.7,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 156913,
+          "cost_usd": 0.2142,
+          "seconds": 38.7,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 7,
+          "questions_docs_answer": 3,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 101695,
+          "cost_usd": 0.0726,
+          "seconds": 13.7,
+          "meets_task": 4,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 87857,
+          "cost_usd": 0.1075,
+          "seconds": 13.3,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.6936,
+          "seconds": 98.4,
+          "tokens": 511647,
+          "tokens_input": 46,
+          "tokens_cached": 503286,
+          "tokens_output": 8315,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.2648,
+      "judge_tokens": 50723,
+      "tokens_split": {
+        "tokens": 577723,
+        "tokens_input": 54,
+        "tokens_cached": 565913,
+        "tokens_output": 11756
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 157178,
+          "cost_usd": 0.2238,
+          "seconds": 23.4,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 4
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 182207,
+          "cost_usd": 0.3345,
+          "seconds": 52.6,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 8,
+          "questions_docs_answer": 0,
+          "rounds": 3
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 101128,
+          "cost_usd": 0.0704,
+          "seconds": 13.4,
+          "meets_task": 4,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 86487,
+          "cost_usd": 0.1008,
+          "seconds": 10.7,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.7295,
+          "seconds": 100.1,
+          "tokens": 527000,
+          "tokens_input": 44,
+          "tokens_cached": 518196,
+          "tokens_output": 8760,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.288,
+      "judge_tokens": 83335,
+      "tokens_split": {
+        "tokens": 559887,
+        "tokens_input": 50,
+        "tokens_cached": 549868,
+        "tokens_output": 9969
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 133974,
+          "cost_usd": 0.2093,
+          "seconds": 21.6,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 154787,
+          "cost_usd": 0.2065,
+          "seconds": 38.6,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 6,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 101136,
+          "cost_usd": 0.0709,
+          "seconds": 13.1,
+          "meets_task": 4,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 86655,
+          "cost_usd": 0.103,
+          "seconds": 11.3,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.5897,
+          "seconds": 84.6,
+          "tokens": 476552,
+          "tokens_input": 40,
+          "tokens_cached": 469230,
+          "tokens_output": 7282,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "07-headcount-conflict",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.2693,
+      "judge_tokens": 71365,
+      "tokens_split": {
+        "tokens": 646672,
+        "tokens_input": 58,
+        "tokens_cached": 636574,
+        "tokens_output": 10040
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 4,
+          "tokens": 187144,
+          "cost_usd": 0.311,
+          "seconds": 30.8,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 201298,
+          "cost_usd": 0.3092,
+          "seconds": 46.3,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 6,
+          "questions_docs_answer": 0,
+          "rounds": 3
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 100913,
+          "cost_usd": 0.0681,
+          "seconds": 13.4,
+          "meets_task": 4,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 85952,
+          "cost_usd": 0.0973,
+          "seconds": 10.3,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 9,
+          "cost_usd": 0.7856,
+          "seconds": 100.8,
+          "tokens": 575307,
+          "tokens_input": 48,
+          "tokens_cached": 567831,
+          "tokens_output": 7428,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "08-update-price-list",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.2497,
+      "judge_tokens": 59396,
+      "tokens_split": {
+        "tokens": 667725,
+        "tokens_input": 64,
+        "tokens_cached": 657939,
+        "tokens_output": 9722
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 5,
+          "tokens": 219285,
+          "cost_usd": 0.3845,
+          "seconds": 38.3,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 145860,
+          "cost_usd": 0.1961,
+          "seconds": 33.9,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 0.8,
+          "stated_share": 1.0,
+          "questions": 5,
+          "questions_docs_answer": 2,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 127915,
+          "cost_usd": 0.0704,
+          "seconds": 12.1,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 115269,
+          "cost_usd": 0.1055,
+          "seconds": 12.7,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 9,
+          "cost_usd": 0.7565,
+          "seconds": 97.0,
+          "tokens": 608329,
+          "tokens_input": 54,
+          "tokens_cached": 601012,
+          "tokens_output": 7263,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "08-update-price-list",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.26,
+      "judge_tokens": 59602,
+      "tokens_split": {
+        "tokens": 609457,
+        "tokens_input": 54,
+        "tokens_cached": 599925,
+        "tokens_output": 9478
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 206179,
+          "cost_usd": 0.2418,
+          "seconds": 25.3,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 4
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 156532,
+          "cost_usd": 0.2009,
+          "seconds": 33.8,
+          "layout_share": 1.0,
+          "task_quality": 3,
+          "essential_share": 1.0,
+          "facts_share": 0.8,
+          "stated_share": 0.75,
+          "questions": 4,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 101513,
+          "cost_usd": 0.0671,
+          "seconds": 10.8,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 85631,
+          "cost_usd": 0.0958,
+          "seconds": 10.3,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6056,
+          "seconds": 80.2,
+          "tokens": 549855,
+          "tokens_input": 44,
+          "tokens_cached": 543511,
+          "tokens_output": 6300,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "08-update-price-list",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.2711,
+      "judge_tokens": 71222,
+      "tokens_split": {
+        "tokens": 660030,
+        "tokens_input": 56,
+        "tokens_cached": 649556,
+        "tokens_output": 10418
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 182081,
+          "cost_usd": 0.2282,
+          "seconds": 24.2,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 4
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 184903,
+          "cost_usd": 0.2204,
+          "seconds": 38.8,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 0.8,
+          "questions": 4,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 104115,
+          "cost_usd": 0.0747,
+          "seconds": 13.5,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 117709,
+          "cost_usd": 0.1079,
+          "seconds": 11.3,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 3
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6312,
+          "seconds": 87.8,
+          "tokens": 588808,
+          "tokens_input": 46,
+          "tokens_cached": 581196,
+          "tokens_output": 7566,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.2941,
+      "judge_tokens": 62818,
+      "tokens_split": {
+        "tokens": 619925,
+        "tokens_input": 56,
+        "tokens_cached": 606895,
+        "tokens_output": 12974
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 158907,
+          "cost_usd": 0.2282,
+          "seconds": 22.7,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 147019,
+          "cost_usd": 0.2136,
+          "seconds": 42.7,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 7,
+          "questions_docs_answer": 2,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 130145,
+          "cost_usd": 0.0839,
+          "seconds": 17.0,
+          "meets_task": 4,
+          "meets_expected": 4
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 121036,
+          "cost_usd": 0.1197,
+          "seconds": 11.6,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6454,
+          "seconds": 94.0,
+          "tokens": 557107,
+          "tokens_input": 46,
+          "tokens_cached": 547958,
+          "tokens_output": 9103,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.2591,
+      "judge_tokens": 39750,
+      "tokens_split": {
+        "tokens": 534735,
+        "tokens_input": 50,
+        "tokens_cached": 523434,
+        "tokens_output": 11251
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 157570,
+          "cost_usd": 0.2276,
+          "seconds": 24.7,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 147388,
+          "cost_usd": 0.2135,
+          "seconds": 38.5,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 0.6666666666666666,
+          "stated_share": 1.0,
+          "questions": 6,
+          "questions_docs_answer": 1,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 101904,
+          "cost_usd": 0.0717,
+          "seconds": 12.8,
+          "meets_task": 4,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 88123,
+          "cost_usd": 0.1053,
+          "seconds": 11.9,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6181,
+          "seconds": 87.9,
+          "tokens": 494985,
+          "tokens_input": 40,
+          "tokens_cached": 487027,
+          "tokens_output": 7918,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "09-vendor-meeting-actions",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.2975,
+      "judge_tokens": 63353,
+      "tokens_split": {
+        "tokens": 659167,
+        "tokens_input": 58,
+        "tokens_cached": 647208,
+        "tokens_output": 11901
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 157261,
+          "cost_usd": 0.2253,
+          "seconds": 24.0,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 4
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 190904,
+          "cost_usd": 0.3151,
+          "seconds": 45.9,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 8,
+          "questions_docs_answer": 4,
+          "rounds": 3
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 128755,
+          "cost_usd": 0.0793,
+          "seconds": 15.6,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 118894,
+          "cost_usd": 0.1156,
+          "seconds": 12.8,
+          "checks_share": 1.0,
+          "result_true": 4,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 8,
+          "cost_usd": 0.7353,
+          "seconds": 98.3,
+          "tokens": 595814,
+          "tokens_input": 48,
+          "tokens_cached": 587669,
+          "tokens_output": 8097,
+          "request_to_done": 4
+        }
+      }
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "run": 1,
+      "error": null,
+      "judge_cost_usd": 0.3029,
+      "judge_tokens": 85280,
+      "tokens_split": {
+        "tokens": 569412,
+        "tokens_input": 50,
+        "tokens_cached": 558058,
+        "tokens_output": 11304
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 133661,
+          "cost_usd": 0.2076,
+          "seconds": 22.5,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 158663,
+          "cost_usd": 0.2291,
+          "seconds": 41.2,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 6,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 102827,
+          "cost_usd": 0.0774,
+          "seconds": 15.6,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 88981,
+          "cost_usd": 0.1111,
+          "seconds": 11.7,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6252,
+          "seconds": 91.0,
+          "tokens": 484132,
+          "tokens_input": 40,
+          "tokens_cached": 475421,
+          "tokens_output": 8671,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "run": 2,
+      "error": null,
+      "judge_cost_usd": 0.2523,
+      "judge_tokens": 39691,
+      "tokens_split": {
+        "tokens": 521914,
+        "tokens_input": 50,
+        "tokens_cached": 510991,
+        "tokens_output": 10873
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 133746,
+          "cost_usd": 0.2073,
+          "seconds": 22.0,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 156847,
+          "cost_usd": 0.2159,
+          "seconds": 39.3,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 4,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 102617,
+          "cost_usd": 0.0784,
+          "seconds": 16.1,
+          "meets_task": 4,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 89013,
+          "cost_usd": 0.1105,
+          "seconds": 11.1,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 4
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6121,
+          "seconds": 88.5,
+          "tokens": 482223,
+          "tokens_input": 40,
+          "tokens_cached": 474118,
+          "tokens_output": 8065,
+          "request_to_done": 5
+        }
+      }
+    },
+    {
+      "scenario": "10-survey-tool-comparison",
+      "run": 3,
+      "error": null,
+      "judge_cost_usd": 0.292,
+      "judge_tokens": 63510,
+      "tokens_split": {
+        "tokens": 559864,
+        "tokens_input": 50,
+        "tokens_cached": 547982,
+        "tokens_output": 11832
+      },
+      "metrics": {
+        "brief": {
+          "completed": 1.0,
+          "turns": 3,
+          "tokens": 157030,
+          "cost_usd": 0.2237,
+          "seconds": 24.1,
+          "layout_share": 1.0,
+          "goal_captured": 5,
+          "scope_right": 5,
+          "nothing_invented": 5
+        },
+        "grill": {
+          "completed": 1.0,
+          "turns": 2,
+          "tokens": 147004,
+          "cost_usd": 0.2194,
+          "seconds": 39.2,
+          "layout_share": 1.0,
+          "task_quality": 4,
+          "essential_share": 1.0,
+          "facts_share": 1.0,
+          "stated_share": 1.0,
+          "questions": 12,
+          "questions_docs_answer": 0,
+          "rounds": 2
+        },
+        "work": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 102977,
+          "cost_usd": 0.0786,
+          "seconds": 16.3,
+          "meets_task": 5,
+          "meets_expected": 5
+        },
+        "record": {
+          "completed": 1.0,
+          "turns": 1,
+          "tokens": 89343,
+          "cost_usd": 0.1127,
+          "seconds": 11.4,
+          "checks_share": 1.0,
+          "result_true": 5,
+          "caveats_honest": 5
+        },
+        "end_to_end": {
+          "completed": 1.0,
+          "turns": 7,
+          "cost_usd": 0.6344,
+          "seconds": 91.0,
+          "tokens": 496354,
+          "tokens_input": 40,
+          "tokens_cached": 487718,
+          "tokens_output": 8596,
+          "request_to_done": 5
+        }
+      }
+    }
+  ],
+  "totals": {
+    "cost_usd": 30.0932,
+    "judge_cost_usd": 9.0938,
+    "tokens": 18742266,
+    "tokens_input": 1652,
+    "tokens_cached": 18366858,
+    "tokens_output": 373756,
+    "judge_tokens": 2083069,
+    "seconds": 3009.8,
+    "wall_seconds": 1560.0
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "runs": [
+    "20261014-095256",
+    "20261014-110844"
+  ],
+  "commits": [
+    "811e8f8+changes",
+    "811e8f8+changes"
+  ],
+  "left_out": [
+    "09-vendor-meeting-actions"
+  ],
+  "metrics": {
+    "brief/completed": {
+      "sd": 0.0,
+      "scenarios": 9
+    },
+    "brief/cost_usd": {
+      "sd": 0.0424,
+      "scenarios": 9
+    },
+    "brief/goal_captured": {
+      "sd": 0.111,
+      "scenarios": 9
+    },
+    "brief/layout_share": {
+      "sd": 0.0,
+      "scenarios": 9
+    },
+    "brief/nothing_invented": {
+      "sd": 0.5031,
+      "scenarios": 9
+    },
+    "brief/scope_right": {
+      "sd": 0.1665,
+      "scenarios": 9
+    },
+    "brief/seconds": {
+      "sd": 5.2325,
+      "scenarios": 9
+    },
+    "brief/tokens": {
+      "sd": 17691.1866,
+      "scenarios": 9
+    },
+    "brief/turns": {
+      "sd": 0.4938,
+      "scenarios": 9
+    },
+    "grill/completed": {
+      "sd": 0.0,
+      "scenarios": 9
+    },
+    "grill/cost_usd": {
+      "sd": 0.0331,
+      "scenarios": 9
+    },
+    "grill/essential_share": {
+      "sd": 0.0521,
+      "scenarios": 9
+    },
+    "grill/facts_share": {
+      "sd": 0.0577,
+      "scenarios": 9
+    },
+    "grill/layout_share": {
+      "sd": 0.0,
+      "scenarios": 9
+    },
+    "grill/questions": {
+      "sd": 2.1991,
+      "scenarios": 9
+    },
+    "grill/questions_docs_answer": {
+      "sd": 0.7895,
+      "scenarios": 9
+    },
+    "grill/rounds": {
+      "sd": 0.2359,
+      "scenarios": 9
+    },
+    "grill/seconds": {
+      "sd": 4.6366,
+      "scenarios": 9
+    },
+    "grill/stated_share": {
+      "sd": 0.0403,
+      "scenarios": 9
+    },
+    "grill/task_quality": {
+      "sd": 0.3768,
+      "scenarios": 9
+    },
+    "grill/tokens": {
+      "sd": 16622.6348,
+      "scenarios": 9
+    },
+    "grill/turns": {
+      "sd": 0.2359,
+      "scenarios": 9
+    },
+    "work/completed": {
+      "sd": 0.111,
+      "scenarios": 9
+    },
+    "work/cost_usd": {
+      "sd": 0.0287,
+      "scenarios": 9
+    },
+    "work/meets_expected": {
+      "sd": 0.3726,
+      "scenarios": 9
+    },
+    "work/meets_task": {
+      "sd": 0.6238,
+      "scenarios": 9
+    },
+    "work/seconds": {
+      "sd": 1.593,
+      "scenarios": 9
+    },
+    "work/tokens": {
+      "sd": 15711.1094,
+      "scenarios": 9
+    },
+    "work/turns": {
+      "sd": 0.3333,
+      "scenarios": 9
+    },
+    "record/caveats_honest": {
+      "sd": 0.333,
+      "scenarios": 9
+    },
+    "record/checks_share": {
+      "sd": 0.0,
+      "scenarios": 9
+    },
+    "record/completed": {
+      "sd": 0.0,
+      "scenarios": 9
+    },
+    "record/cost_usd": {
+      "sd": 0.0044,
+      "scenarios": 9
+    },
+    "record/result_true": {
+      "sd": 0.4085,
+      "scenarios": 9
+    },
+    "record/seconds": {
+      "sd": 0.6683,
+      "scenarios": 9
+    },
+    "record/tokens": {
+      "sd": 9493.0253,
+      "scenarios": 9
+    },
+    "record/turns": {
+      "sd": 0.0,
+      "scenarios": 9
+    },
+    "end_to_end/completed": {
+      "sd": 0.111,
+      "scenarios": 9
+    },
+    "end_to_end/cost_usd": {
+      "sd": 0.0616,
+      "scenarios": 9
+    },
+    "end_to_end/request_to_done": {
+      "sd": 0.2887,
+      "scenarios": 9
+    },
+    "end_to_end/seconds": {
+      "sd": 8.5889,
+      "scenarios": 9
+    },
+    "end_to_end/tokens": {
+      "sd": 24231.6084,
+      "scenarios": 9
+    },
+    "end_to_end/tokens_cached": {
+      "sd": 24136.1801,
+      "scenarios": 9
+    },
+    "end_to_end/tokens_input": {
+      "sd": 2.2138,
+      "scenarios": 9
+    },
+    "end_to_end/tokens_output": {
+      "sd": 644.0215,
+      "scenarios": 9
+    },
+    "end_to_end/turns": {
+      "sd": 0.6186,
+      "scenarios": 9
+    }
+  }
+}

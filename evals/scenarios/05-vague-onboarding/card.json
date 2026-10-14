@@ -1,0 +1,42 @@
+{
+  "kind": "vague one-line request",
+  "project": "people-ops",
+  "facts": [
+    {
+      "id": "goal",
+      "essential": true,
+      "fact": "A checklist for a new hire's first week in the customer support team."
+    },
+    {
+      "id": "audience",
+      "essential": true,
+      "fact": "The team leads who do the onboarding. They tick it off day by day."
+    },
+    {
+      "id": "deadline",
+      "essential": true,
+      "fact": "Three new hires start on {{today+21d}}; the checklist is needed before then."
+    },
+    {
+      "id": "format",
+      "essential": true,
+      "fact": "One page, grouped by day, Monday to Friday."
+    },
+    {
+      "id": "content",
+      "essential": true,
+      "fact": "Day 1: laptop and accounts. Days 2 and 3: shadowing a senior agent. Day 4: first own tickets, with review. Day 5: feedback talk with the team lead."
+    },
+    {
+      "id": "out_of_scope",
+      "essential": false,
+      "fact": "Contracts and payroll paperwork are handled by HR and do not belong in the checklist."
+    },
+    {
+      "id": "language",
+      "essential": false,
+      "fact": "English."
+    }
+  ],
+  "covered_by_docs": []
+}

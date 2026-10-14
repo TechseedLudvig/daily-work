@@ -1,0 +1,51 @@
+{
+  "kind": "request where the documents answer almost everything",
+  "project": "facilities",
+  "facts": [
+    {
+      "id": "goal",
+      "essential": true,
+      "fact": "The September facilities report, in the same structure as the August one."
+    },
+    {
+      "id": "lift_outage",
+      "essential": true,
+      "fact": "The lift was out of service on 14 September for about six hours. It is not in the figures and must be mentioned under Incidents."
+    },
+    {
+      "id": "file_name",
+      "essential": false,
+      "fact": "Name the file like last month's, with september in place of august."
+    }
+  ],
+  "covered_by_docs": [
+    {
+      "topic": "who the report is for",
+      "doc": "facilities-report-august.md"
+    },
+    {
+      "topic": "the sections and the format of the report",
+      "doc": "facilities-report-august.md"
+    },
+    {
+      "topic": "last month's figures, for comparison",
+      "doc": "facilities-report-august.md"
+    },
+    {
+      "topic": "electricity and heating for September",
+      "doc": "september-figures.md"
+    },
+    {
+      "topic": "cleaning complaints for September",
+      "doc": "september-figures.md"
+    },
+    {
+      "topic": "maintenance tickets for September",
+      "doc": "september-figures.md"
+    },
+    {
+      "topic": "incidents logged in September",
+      "doc": "september-figures.md"
+    }
+  ]
+}
