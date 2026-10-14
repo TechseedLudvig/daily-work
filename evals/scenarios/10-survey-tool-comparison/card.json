@@ -1,0 +1,54 @@
+{
+  "kind": "comparison and recommendation",
+  "project": "survey-tool",
+  "facts": [
+    {
+      "id": "seats",
+      "essential": true,
+      "fact": "We need 40 seats."
+    },
+    {
+      "id": "languages",
+      "essential": true,
+      "fact": "The tool must handle surveys in both Swedish and English."
+    },
+    {
+      "id": "budget",
+      "essential": true,
+      "fact": "The ceiling is 60 000 SEK per year."
+    },
+    {
+      "id": "output",
+      "essential": true,
+      "fact": "A one-page comparison table and a recommendation."
+    },
+    {
+      "id": "decider",
+      "essential": true,
+      "fact": "The head of HR decides; the page is for her."
+    },
+    {
+      "id": "sso",
+      "essential": false,
+      "fact": "Single sign-on would be nice but is not required."
+    }
+  ],
+  "covered_by_docs": [
+    {
+      "topic": "price per seat for each tool",
+      "doc": "price-sheet.md"
+    },
+    {
+      "topic": "which languages each tool supports",
+      "doc": "trial-notes.md"
+    },
+    {
+      "topic": "single sign-on per tool",
+      "doc": "trial-notes.md"
+    },
+    {
+      "topic": "what the trial users thought",
+      "doc": "trial-notes.md"
+    }
+  ]
+}

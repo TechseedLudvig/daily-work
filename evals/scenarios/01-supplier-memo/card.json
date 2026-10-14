@@ -1,0 +1,20 @@
+{
+  "kind": "memo",
+  "project": "supplier-review",
+  "facts": [
+    {"id": "goal", "essential": true, "fact": "Decide whether to renew with Nordfrakt or switch freight supplier."},
+    {"id": "audience", "essential": true, "fact": "The logistics steering group: five people, not finance specialists."},
+    {"id": "deadline", "essential": true, "fact": "The memo is needed before the steering group meeting on {{today+14d}}."},
+    {"id": "length", "essential": true, "fact": "One page at most, in English."},
+    {"id": "success", "essential": true, "fact": "A clear recommendation, with the yearly cost difference in SEK for each alternative."},
+    {"id": "alternatives", "essential": false, "fact": "Only Baltic Cargo and Skanlog are realistic alternatives."},
+    {"id": "format", "essential": false, "fact": "A markdown file is fine."}
+  ],
+  "covered_by_docs": [
+    {"topic": "on-time delivery per supplier", "doc": "freight-scorecard-2025.md"},
+    {"topic": "damage claims per supplier", "doc": "freight-scorecard-2025.md"},
+    {"topic": "price per pallet per supplier", "doc": "freight-scorecard-2025.md"},
+    {"topic": "yearly volume in pallets", "doc": "freight-scorecard-2025.md"},
+    {"topic": "contract end date and notice period", "doc": "freight-scorecard-2025.md"}
+  ]
+}

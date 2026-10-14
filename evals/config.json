@@ -1,0 +1,55 @@
+{
+  "models": {
+    "plugin": "sonnet",
+    "user": "sonnet",
+    "judge": "opus"
+  },
+  "temperature": null,
+  "runs_per_scenario": 3,
+  "jobs": 3,
+  "call_timeout_seconds": 900,
+  "turn_caps": {
+    "brief": 6,
+    "grill": 12,
+    "work": 4,
+    "record": 1
+  },
+  "plugin_tools": ["Bash", "Read", "Write", "Edit", "Glob", "Grep", "Skill", "Agent"],
+  "grills": {
+    "mattpocock-1.2.3": {
+      "plugin_dir": "~/.claude/plugins/cache/claude-plugins-official/mattpocock-skills/1.2.3",
+      "command": "/mattpocock-skills:grill-with-docs {brief}",
+      "sha256": "e960f46db0ed2144554504738278eef4fe1f1dbd41f527631b37c5a3f92421d9",
+      "note": "mattpocock/skills 1.2.3, commit c55ee46073ed923f86ce59a5eb3b6d895095d1b7"
+    }
+  },
+  "default_grill": "mattpocock-1.2.3",
+  "estimate_per_run": {"tokens": 800000, "minutes": 3, "usd_at_api_prices": 1.2},
+  "thresholds": {
+    "score": 0.5,
+    "share": 0.15,
+    "count_relative": 0.25,
+    "noise_multiplier": 3
+  },
+  "rubrics": {
+    "brief": {
+      "goal_captured": "The brief says what is wanted, as the request states it. 5: the goal is unmistakable. 1: the goal is missing or wrong.",
+      "scope_right": "The brief covers the request and no more: nothing dropped, nothing widened. 5: same scope as the request. 1: a different task.",
+      "nothing_invented": "Every statement in the brief comes from the request or from what the user said in the conversation. Open points are left open. 5: nothing added. 1: several invented facts or decisions."
+    },
+    "grill": {
+      "task_quality": "The task file's Spec is something a person could work from: Purpose says who it is for, each Done line can be checked in under a minute, Decided separates stated from assumed, Out of scope is real. 5: ready to work on. 1: vague or wrong."
+    },
+    "work": {
+      "meets_task": "The output does what the task file's Ask and Spec say, Done lines included. 5: every Done line holds. 1: most do not.",
+      "meets_expected": "The output contains everything under 'Must contain' in the expected list and nothing under 'Must not contain'. 5: all of it. 1: most is missing or a 'must not' is present."
+    },
+    "record": {
+      "result_true": "Everything under Result is true of the output files and the conversation: paths exist, figures match the output. 5: all true. 1: describes work that was not done.",
+      "caveats_honest": "Caveats name what was assumed and what could not be checked, and do not say 'None.' when there was something. 5: complete and accurate. 1: missing or misleading."
+    },
+    "end_to_end": {
+      "request_to_done": "Taking the original request and the hidden facts as what the person really wanted: would they accept the final output as it is? 5: yes, as is. 3: after small fixes. 1: no."
+    }
+  }
+}

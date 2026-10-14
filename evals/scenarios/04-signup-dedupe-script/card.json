@@ -1,0 +1,55 @@
+{
+  "kind": "small coding task",
+  "project": "newsletter",
+  "facts": [
+    {
+      "id": "language",
+      "essential": true,
+      "fact": "Python 3, standard library only. We cannot install packages on that machine."
+    },
+    {
+      "id": "duplicate_rule",
+      "essential": true,
+      "fact": "Two rows are duplicates when the email is the same, ignoring upper and lower case and spaces around it."
+    },
+    {
+      "id": "keep",
+      "essential": true,
+      "fact": "Of duplicates, keep the row with the earliest signup date."
+    },
+    {
+      "id": "no_overwrite",
+      "essential": true,
+      "fact": "Write the result to a new file. Never change the export itself."
+    },
+    {
+      "id": "rejects",
+      "essential": true,
+      "fact": "Rows whose email has no @ go to a separate rejects file, not into the result."
+    },
+    {
+      "id": "size",
+      "essential": false,
+      "fact": "The real export is about 20 000 rows."
+    },
+    {
+      "id": "usage",
+      "essential": false,
+      "fact": "I run it from the command line and give it the path of the export."
+    }
+  ],
+  "covered_by_docs": [
+    {
+      "topic": "the columns of the export",
+      "doc": "signup-export-sample.md"
+    },
+    {
+      "topic": "the date format",
+      "doc": "signup-export-sample.md"
+    },
+    {
+      "topic": "what the duplicates look like",
+      "doc": "signup-export-sample.md"
+    }
+  ]
+}

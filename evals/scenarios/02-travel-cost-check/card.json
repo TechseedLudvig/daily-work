@@ -1,0 +1,19 @@
+{
+  "kind": "data check",
+  "project": "board-pack",
+  "facts": [
+    {"id": "goal", "essential": true, "fact": "Confirm the Q3 travel cost table on slide 7 of the board pack before the pack is sent to the board."},
+    {"id": "authority", "essential": true, "fact": "The ledger is right when the two differ."},
+    {"id": "tolerance", "essential": true, "fact": "Differences under 500 SEK per department are rounding and can be ignored."},
+    {"id": "output", "essential": true, "fact": "A short list of what does not match, with both amounts and the difference. No rewrite of the slide."},
+    {"id": "deadline", "essential": true, "fact": "The pack is sent on {{today+3d}}."},
+    {"id": "audience", "essential": false, "fact": "The list is for me; I pass corrections to the person who owns the slide."},
+    {"id": "scope", "essential": false, "fact": "Only travel cost. Other slides are someone else's job."}
+  ],
+  "covered_by_docs": [
+    {"topic": "the figures in the board pack", "doc": "board-pack-extract.md"},
+    {"topic": "the ledger figures per department and month", "doc": "ledger-export.md"},
+    {"topic": "which account and which quarter", "doc": "ledger-export.md"},
+    {"topic": "which departments", "doc": "board-pack-extract.md"}
+  ]
+}

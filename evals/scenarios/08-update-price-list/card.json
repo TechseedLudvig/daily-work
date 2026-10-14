@@ -1,0 +1,41 @@
+{
+  "kind": "task that changes a file already in outputs",
+  "project": "price-lists",
+  "facts": [
+    {
+      "id": "margin",
+      "essential": true,
+      "fact": "Our price is the supplier's cost times 1.25, rounded to whole SEK."
+    },
+    {
+      "id": "in_place",
+      "essential": true,
+      "fact": "Change the existing price list file. No new file, no copy."
+    },
+    {
+      "id": "untouched",
+      "essential": true,
+      "fact": "Items the supplier's new rates do not mention keep their cost and price."
+    },
+    {
+      "id": "valid_from",
+      "essential": true,
+      "fact": "The new prices are valid from {{today+30d}}; the file's valid-from line must say so."
+    },
+    {
+      "id": "nothing_else",
+      "essential": false,
+      "fact": "Change nothing else in the file."
+    }
+  ],
+  "covered_by_docs": [
+    {
+      "topic": "the supplier's new cost per item",
+      "doc": "new-supplier-rates.md"
+    },
+    {
+      "topic": "which items change",
+      "doc": "new-supplier-rates.md"
+    }
+  ]
+}
