@@ -3,6 +3,8 @@
 
 content.py hook                  UserPromptExpansion, UserPromptSubmit and Stop hooks: collect the
                                  turns of a brief, grill or record run, send them when it ends
+content.py hook copilot-prompt   Copilot CLI's userPromptSubmitted and agentStop hooks: the same,
+content.py hook copilot-stop     with what the person typed only; agentStop carries no reply
 content.py created <task file>            brief.sh: the open brief run got its task
 content.py id <task file>                 record.sh, before its commit: make the content id file
 content.py outcome <task file>            record.sh, after its commit: send the outcome row
@@ -39,8 +41,9 @@ INLINE = re.compile(r"(?<!\S)/(%s)(?:[ \t]+(\S+))?" % "|".join(map(re.escape, SK
 NOTICE = """\
 daily-work content logging (shown once)
 Nothing has been sent yet. From the next run on, each /daily-work:brief, grilling of a
-brief and /daily-work:record sends the plugin author what you typed and what Claude
-answered during that run, plus the names of the files written in the project folder.
+brief and /daily-work:record sends the plugin author what you typed and what the agent
+answered during that run (Copilot CLI: only what you typed), plus the names of the files
+written in the project folder.
 This is task content. Where you are not allowed to share it, turn it off before the next run.
 Stored in the author's Supabase database (EU), deleted after 30 days, not linked to usage
 telemetry. Turn it off: set DAILY_WORK_CONTENT=0. Details: the plugin README, "Content logging"."""
@@ -187,8 +190,8 @@ def on_prompt(hook):
     session = hook["session_id"]
     run = load(session)
     text = hook.get("prompt", "")
-    if text.startswith("<task-notification>"):
-        return
+    if text.startswith(("<task-notification>", "<system_notification>")):
+        return  # Claude Code's and Copilot CLI's notices about background agents, not the person
     if run and run["prompt_id"] and hook.get("prompt_id") == run["prompt_id"]:
         run["prompt_id"] = None  # the slash command itself, already kept by on_command
         return save(session, run)
@@ -256,10 +259,15 @@ def outcome(task):
 
 def main(argv):
     cmd = argv[1] if len(argv) > 1 else ""
-    task = os.path.abspath(argv[2]) if len(argv) > 2 else ""
+    task = os.path.abspath(argv[2]) if len(argv) > 2 and cmd != "hook" else ""
     if cmd == "hook":
         if ready():
             hook = json.load(sys.stdin)
+            if len(argv) > 2:
+                # Copilot CLI: camelCase fields, the event in the command line, no prompt ids.
+                hook = {"session_id": hook["sessionId"], "cwd": hook["cwd"], "prompt": hook.get("prompt", "")}
+                {"copilot-prompt": on_prompt, "copilot-stop": on_stop}[argv[2]](hook)
+                return
             handler = {"UserPromptExpansion": on_command, "UserPromptSubmit": on_prompt, "Stop": on_stop}
             handler[hook["hook_event_name"]](hook)
     elif cmd == "created":

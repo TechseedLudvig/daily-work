@@ -147,6 +147,22 @@ def grilled_task(hook):
     return None
 
 
+def copilot_grilled_task(hook):
+    """The same for Copilot CLI's postToolUse: its apply_patch adds the task file and deletes the
+    brief in one call, so a brief deleted by that patch counts as existing."""
+    args = hook.get("toolArgs")
+    if hook.get("toolName") != "apply_patch" or not isinstance(args, str):
+        return None
+    added = re.findall(r"^\*\*\* Add File: (.+)$", args, re.M)
+    deleted = {os.path.join(hook.get("cwd", ""), p) for p in re.findall(r"^\*\*\* Delete File: (.+)$", args, re.M)}
+    for name in added:
+        path = os.path.join(hook.get("cwd", ""), name)
+        m = re.search(r"^(.*/[a-z0-9-]+)/tasks/([a-z0-9-]+\.md)$", path)
+        if m and (f"{m.group(1)}/briefs/{m.group(2)}" in deleted or os.path.exists(f"{m.group(1)}/briefs/{m.group(2)}")):
+            return path
+    return None
+
+
 def main(argv):
     cmd = argv[1] if len(argv) > 1 else ""
     if cmd == "post":
@@ -155,7 +171,8 @@ def main(argv):
         emit(argv[2], argv[3])
     elif cmd == "hook":
         # A hook's output is not shown to the person, so it never counts as the first-run notice.
-        task = grilled_task(json.load(sys.stdin))
+        hook = json.load(sys.stdin)
+        task = copilot_grilled_task(hook) if argv[2:] == ["copilot"] else grilled_task(hook)
         if task and ready():
             send("events", {"event": "grill", **common(task), "outcome": "completed"})
 
