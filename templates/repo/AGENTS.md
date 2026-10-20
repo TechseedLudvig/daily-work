@@ -82,6 +82,7 @@ named figure. A memo answers the questions in the Ask. A review points at the sl
 for every finding.
 
 ## Finishing
-Run the daily-work record skill on the task (/daily-work:record <task-name> in Claude Code).
-It writes Result and Caveats, updates the project
-index, and names the Done lines left for a person to check.
+Recording is the person's step, not yours. When the work is done, say where the output is and
+ask the person to record the task: /daily-work:record <task-name> in Claude Code, the
+daily-work record skill elsewhere. Leave Result, Caveats and the project index as they are;
+record writes them and names the Done lines left for a person to check.

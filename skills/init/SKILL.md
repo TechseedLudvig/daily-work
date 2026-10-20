@@ -6,15 +6,16 @@ description: >-
   AGENTS.md gets only missing ## sections, an existing .gitignore only missing lines, an existing
   CLAUDE.md only the @AGENTS.md line.
   The session runs one script and edits nothing.
-disable-model-invocation: true
+  Only when the person asks for it by name; never on your own.
 argument-hint: "[dir]"
 ---
 
 # Init
 
-`<plugin>` in the commands below is the daily-work plugin folder: the folder two levels above
-the one this SKILL.md is in. Write it as an absolute path. Run this skill only when the person
-asks for it by name.
+`<plugin>` in the commands below is the daily-work plugin folder, the one that holds `scripts/`
+and `skills/`; this file is `<plugin>/skills/init/SKILL.md`. Write it as an absolute path.
+Run this skill only when the person's own message asks for it by name. Never start it yourself,
+not even when the work looks finished; ask the person instead.
 
 Run this one command from the repo root, with the arguments the person gave (usually none):
 
