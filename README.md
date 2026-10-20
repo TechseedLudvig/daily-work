@@ -7,8 +7,10 @@ engagement, a system, a recurring responsibility). A person describes a task in 
 `grill-with-docs` skill grills the brief into a task the agent can work on; the plugin records
 what was done. Nothing here builds software.
 
-It is built and tested in Claude Code, and this README uses Claude Code's commands. For the
-other agents see [Other coding agents](#other-coding-agents).
+It runs in Claude Code and GitHub Copilot CLI, both tested through the whole loop, and
+installs in OpenAI Codex, where its skills have not been run yet. The commands are the same in
+each: `/daily-work:brief`, `/daily-work:record` and so on. What differs is in
+[Differences between agents](#differences-between-agents).
 
 Local filesystem and git, plus two kinds of network call to the plugin author: usage
 telemetry and content logging. Both are on by default and each has its own off switch.
@@ -24,13 +26,15 @@ none of it. See [Content logging](#content-logging).
 
 ## Setup
 
-New to Claude Code, or on a computer without it? Start with
-[GETTING-STARTED.md](GETTING-STARTED.md).
+New to coding agents, or on a computer without one? Start with
+[GETTING-STARTED.md](GETTING-STARTED.md) (Claude Code).
 
-Everything below happens in your **work repo**, the repo where you do daily work, not in this
-plugin's repo.
+**1. Install the plugins** (once per machine). daily-work, and Matt Pocock's
+[mattpocock/skills](https://github.com/mattpocock/skills) for the grilling step. daily-work
+uses his `grill-with-docs` skill (which calls his `grilling` and `domain-modeling`) as
+`/mattpocock-skills:grill-with-docs`; it does not ship or call it.
 
-**1. Install the plugins** (once per machine, inside Claude Code):
+Claude Code, inside a session:
 
 ```
 /plugin marketplace add ludvignion/daily-work
@@ -38,20 +42,35 @@ plugin's repo.
 /plugin install mattpocock-skills
 ```
 
-`mattpocock-skills` is Matt Pocock's skill set from
-[mattpocock/skills](https://github.com/mattpocock/skills), in Claude Code's official
-marketplace. daily-work uses its `grill-with-docs` skill (which calls his `grilling` and
-`domain-modeling`) for the grilling step, as `/mattpocock-skills:grill-with-docs`. daily-work
-does not ship or call it.
+GitHub Copilot CLI, from a terminal:
 
-Both plugins update automatically. A planned change in Matt Pocock's skills renames
-`CONTEXT.md` to `GLOSSARY.md`; it will arrive without warning, so the generated `AGENTS.md`
-reads whichever of the two exists.
+```
+copilot plugin marketplace add ludvignion/daily-work
+copilot plugin install daily-work@daily-work
+copilot plugin marketplace add mattpocock/skills
+copilot plugin install mattpocock-skills@mattpocock
+```
 
-To update daily-work by hand: `/plugin marketplace update daily-work`, then restart Claude
-Code. From a terminal, the same commands start with `claude plugin` instead of `/plugin`.
+OpenAI Codex, from a terminal:
 
-**2. Create the work repo and set it up** (once per work repo):
+```
+codex plugin marketplace add ludvignion/daily-work
+codex plugin add daily-work@daily-work
+codex plugin marketplace add mattpocock/skills
+codex plugin add mattpocock-skills@mattpocock
+```
+
+Updates: Claude Code updates both plugins by itself; by hand, `/plugin marketplace update
+daily-work`, then restart Claude Code. In Copilot CLI run `copilot plugin update
+daily-work@daily-work` (and the same for `mattpocock-skills@mattpocock`). An agent installs a
+new release only when the version in `plugin.json` changes.
+
+A planned change in Matt Pocock's skills renames `CONTEXT.md` to `GLOSSARY.md`; it will
+arrive without warning, so the generated `AGENTS.md` reads whichever of the two exists.
+
+**2. Create the work repo and set it up** (once per work repo). The work repo is the repo
+where you do daily work, not this plugin's repo. Start your agent there (`claude`, `copilot`
+or `codex`) and run init:
 
 ```
 mkdir ~/workspace/<work repo> && cd ~/workspace/<work repo>
@@ -60,62 +79,47 @@ claude
 ```
 
 To try a local checkout of daily-work instead of installing it:
-`claude --plugin-dir /path/to/daily-work`.
-
-## Other coding agents
-
-The same repo installs in GitHub Copilot CLI and OpenAI Codex. Copilot CLI 1.0.100 was run
-on 2026-10-20 through init, brief, grill, work and record. Codex 0.163.0 installs the
-plugin; its skills have not been run yet.
-
-| Agent | Install |
-| --- | --- |
-| Claude Code | `/plugin marketplace add ludvignion/daily-work`, then `/plugin install daily-work@daily-work` |
-| GitHub Copilot CLI | `copilot plugin marketplace add ludvignion/daily-work`, then `copilot plugin install daily-work@daily-work` |
-| OpenAI Codex | `codex plugin marketplace add ludvignion/daily-work`, then `codex plugin add daily-work@daily-work` |
-
-Matt Pocock's skills, needed for the grilling step, install the same way from his
-marketplace: `copilot plugin marketplace add mattpocock/skills`, then
-`copilot plugin install mattpocock-skills@mattpocock` (Codex: `codex plugin marketplace add
-mattpocock/skills`, then `codex plugin add mattpocock-skills@mattpocock`).
-
-What differs outside Claude Code:
-
-| | Claude Code | Copilot CLI, Codex |
-| --- | --- | --- |
-| The four skills (init, brief, record, feedback) | yes, as `/daily-work:<skill>` | yes; Copilot CLI also as `/daily-work:<skill>` |
-| `AGENTS.md` in the work repo | read directly (Claude Code v2.1.277 or later); through `CLAUDE.md` if the repo has one | read directly |
-| Telemetry events for brief and record | yes | yes |
-| Telemetry event for a finished grilling | yes | Copilot CLI: yes. Codex: no |
-| Content logging of prompts and replies | yes | Copilot CLI: what you typed, not the agent's replies. Codex: no; only the outcome row when record finishes |
-| Switches in `.claude/settings.json` | yes | no; set `DAILY_WORK_TELEMETRY=0` or `DAILY_WORK_CONTENT=0` in your shell |
-
-The last three rows depend on hooks: Claude Code's in `claude-code/hooks.json`, Copilot CLI's
-in `com.github.copilot/hooks/hooks.json`. Codex loads neither. Copilot's stop hook carries no
-reply text, and the plugin does not read the transcript to get it.
+`claude --plugin-dir /path/to/daily-work` or `copilot --plugin-dir /path/to/daily-work`.
 
 Not supported: installing the skills alone with `npx skills add ludvignion/daily-work`. That
 copies each skill's folder without the plugin's `scripts/` and `templates/`, which the skills
 need.
 
+## Differences between agents
+
+| | Claude Code | Copilot CLI | Codex |
+| --- | --- | --- | --- |
+| Tested through brief, grill, work and record | yes | yes, 1.0.100 on 2026-10-20 | no; 0.163.0 installs the plugin |
+| The four skills as `/daily-work:<skill>` | yes | yes | not run yet |
+| `AGENTS.md` in the work repo | read directly (v2.1.277 or later); through `CLAUDE.md` if the repo has one | read directly | read directly |
+| Telemetry events for brief and record | yes | yes | yes |
+| Telemetry event for a finished grilling | yes | yes | no |
+| Content logging | what you typed and the agent's replies | what you typed only | no; only the outcome row when record finishes |
+| Switches | `.claude/settings.json` or the shell | the shell | the shell |
+
+The grill event and content logging come from hooks: Claude Code's in `claude-code/hooks.json`,
+Copilot CLI's in `com.github.copilot/hooks/hooks.json`. Codex loads neither. Copilot's stop
+hook carries no reply text, and the plugin does not read the transcript to get it.
+
 ## The per-task loop
 
 1. **Brief.** Describe the task in your own words:
    `/daily-work:brief hackathon I want to help my colleague visualise different options of a UNS structure …`
-   Claude rewrites it into a clear brief (no additions, open points left open), with a
+   The agent rewrites it into a clear brief (no additions, open points left open), with a
    heading and a file name, and asks for the project if you did not name an existing one.
    You approve or correct it; only then is `hackathon/briefs/uns-mockup.md` written, and the
    project folder with it if the project is new.
 2. **Grill.** `/mattpocock-skills:grill-with-docs hackathon/briefs/uns-mockup.md` (Matt Pocock's
    skill). It interviews you until the task is clear, and records terms in `CONTEXT.md` and
-   decisions in `docs/adr/`. When it ends, the generated AGENTS.md has Claude write
+   decisions in `docs/adr/`. When it ends, the generated AGENTS.md has the agent write
    `hackathon/tasks/uns-mockup.md` and delete the brief: the brief as the Ask, what was
    settled as the Spec.
-3. **Work.** Tell Claude "work on uns-mockup". Client files go in the project's
+3. **Work.** Tell the agent "work on uns-mockup". Client files go in the project's
    `inputs/`; what the task produces, code included, goes in the project's `outputs/`.
 4. **Record.** `/daily-work:record uns-mockup` shows the Result and Caveats it drafted and
    asks "Record this?". On yes it writes them, marks the task done in the project README,
-   commits, and lists the Done lines a person still has to check.
+   commits, and lists the Done lines a person still has to check. The agent never records on
+   its own; when the work is done it asks you to.
 
 You never have to type a path. `brief` prints the grill line to paste; after that the task
 name is enough (`/mattpocock-skills:grill-with-docs uns-mockup` works too), and
@@ -191,6 +195,40 @@ python-docx, pypdf and python-dotenv for `uv`; edit it to suit.
 - It never creates or edits `CONTEXT.md`, `GLOSSARY.md`, `CONTEXT-MAP.md` or `docs/adr/`;
   those belong to `grill-with-docs`.
 
+## This repo
+
+```
+daily-work/
+  plugin.json                       manifest for Copilot CLI and Codex (Agent Plugins 1.0)
+  .claude-plugin/
+    plugin.json                     manifest for Claude Code; names claude-code/hooks.json
+    marketplace.json                the marketplace for Claude Code and Copilot CLI
+  .agents/plugins/marketplace.json  the marketplace for Codex
+  claude-code/hooks.json            Claude Code hooks: grill event, content logging
+  com.github.copilot/hooks/hooks.json  Copilot CLI hooks: the same
+  skills/                           the four skills, one SKILL.md each
+    init/  brief/  record/  feedback/
+  scripts/                          what the skills run
+    init.sh  brief.sh  record.sh  lib.sh
+    telemetry.py  content.py  feedback.py
+  templates/
+    repo/                           copied by init: AGENTS.md, README.md, .gitignore,
+                                    .env.example, pyproject.toml, .claude/settings.json;
+                                    CLAUDE.md, whose @AGENTS.md line goes into an existing one
+    project/                        a new project's README.md and sources.md
+    brief/brief.md                  a new brief
+  telemetry.json                    Supabase URL and insert-only key
+  supabase/migrations/              tables and rules for events, content, feedback, eval runs
+  metrics/                          weekly numbers and content export, for the author
+  evals/                            offline eval: scenarios, judge, baselines; see evals/README.md
+  tests/                            python3 -m unittest discover tests
+  GETTING-STARTED.md                from a bare computer to the first task (Claude Code)
+```
+
+The version is in three places that must match: `plugin.json`, `.claude-plugin/plugin.json`
+and `.claude-plugin/marketplace.json` (twice); a test checks it. The instructions an agent
+follows in a work repo are `templates/repo/AGENTS.md` and the four `SKILL.md` files.
+
 ## Where the switches live
 
 `/daily-work:init` creates `.claude/settings.json` in the work repo with both switches on:
@@ -206,6 +244,9 @@ python-docx, pypdf and python-dotenv for `uv`; edit it to suit.
 
 Change a `"1"` to `"0"` to turn that one off, then restart Claude Code. Only `0` turns a
 switch off; a missing line means on.
+
+Copilot CLI and Codex do not read `.claude/settings.json`. There, set the switch in the shell
+that starts the agent, for example `export DAILY_WORK_CONTENT=0` in `~/.bashrc`.
 
 | File | Applies to |
 | --- | --- |
@@ -258,8 +299,8 @@ about the task. A task file without the line sends its events without a task id.
 **First run.** The first command that would send an event prints a notice instead and sends
 nothing. Events start with the run after that.
 
-**Opt out.** In the work repo's `.claude/settings.json`, which `/daily-work:init` creates,
-change `"DAILY_WORK_TELEMETRY": "1"` to `"0"` and restart Claude Code. See
+**Opt out.** Set `DAILY_WORK_TELEMETRY=0`: in Claude Code in the work repo's
+`.claude/settings.json`, which `/daily-work:init` creates, elsewhere in the shell. See
 [Where the switches live](#where-the-switches-live).
 
 Nothing is sent, no notice is shown and no install id is made.
@@ -283,11 +324,12 @@ never belongs in this repo. Tests: `python3 -m unittest discover tests`.
 ## Content logging
 
 On by default. It sends the plugin author what you typed and what the agent answered during
-skill runs (in Copilot CLI only what you typed), so that changes to the plugin can be tested against real runs. That is task
-content, possibly client content: turn it off wherever you are not allowed to share it.
+skill runs (in Copilot CLI only what you typed; in Codex nothing but the outcome row), so that
+changes to the plugin can be tested against real runs. That is task content, possibly client
+content: turn it off wherever you are not allowed to share it.
 
-**Turn it off:** in the work repo's `.claude/settings.json`, change
-`"DAILY_WORK_CONTENT": "1"` to `"0"` and restart Claude Code. See
+**Turn it off:** set `DAILY_WORK_CONTENT=0`: in Claude Code in the work repo's
+`.claude/settings.json`, elsewhere in the shell. See
 [Where the switches live](#where-the-switches-live).
 
 Only the value `0` turns it off. Nothing is sent, nothing is kept on disk, and no notice is
@@ -311,17 +353,17 @@ logged. A run that never ends is never sent.
 | `ts` | UTC time, rounded down to the hour |
 | `plugin_version` | from `plugin.json` |
 | `content_id` | a random UUID for the task, see below |
-| `turns` | everything you typed and every final answer of Claude during the run, in order, starting with the command line (Copilot CLI: only what you typed); any single one over 50 KB is cut there and marked `truncated` |
+| `turns` | everything you typed and every final answer of the agent during the run, in order, starting with the command line (Copilot CLI: only what you typed); any single one over 50 KB is cut there and marked `truncated` |
 | `files` | the files changed in the project folder during the run, as paths inside that folder (`outputs/report.xlsx`); never their contents, never the project name. The task's own file is listed as `task.md` or `brief.md` and other tasks' files are left out, so no task name is in the list |
 
 What you type is sent as typed. A `/daily-work:record q3-numbers` line
-therefore carries that task name, and Claude's answers may name files and quote task content.
+therefore carries that task name, and the agent's answers may name files and quote task content.
 
 **Sent once when record finishes:** `kind` `outcome`, `ts`, `plugin_version`, `content_id`,
 `outcome` (`completed`), and `grill_completed`: whether a grill
 run of this task was logged.
 
-**Never sent:** file contents, the transcript, tool calls and their output, Claude's
+**Never sent:** file contents, the transcript, tool calls and their output, the agent's
 intermediate messages within a turn, anything from outside a run, the install id, the
 telemetry task id.
 
