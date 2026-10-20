@@ -4,7 +4,7 @@ description: >-
   /daily-work:brief [project] <describe the task>. Rewrite a person's description of a task into
   a clear brief, show it for the person to verify, then write it to
   <project>/briefs/<task-name>.md, ready for /mattpocock-skills:grill-with-docs, creating the project if new.
-disable-model-invocation: true
+  Only when the person asks for it by name; never on your own.
 argument-hint: "[project] <describe the task>"
 ---
 
@@ -13,9 +13,10 @@ argument-hint: "[project] <describe the task>"
 The user typed: `$ARGUMENTS`
 If that line does not show the person's text, use what they wrote after the skill name.
 
-`<plugin>` in the commands below is the daily-work plugin folder: the folder two levels above
-the one this SKILL.md is in. Write it as an absolute path. Run this skill only when the person
-asks for it by name.
+`<plugin>` in the commands below is the daily-work plugin folder, the one that holds `scripts/`
+and `skills/`; this file is `<plugin>/skills/brief/SKILL.md`. Write it as an absolute path.
+Run this skill only when the person's own message asks for it by name. Never start it yourself,
+not even when the work looks finished; ask the person instead.
 
 1. **Project.** The projects are the folders at the repo root that hold a `tasks/` folder;
    list them. If the first word of the text is one of them, that is the project and the rest

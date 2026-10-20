@@ -102,8 +102,8 @@ All inside Claude Code, in your work repo:
 4. **Do the work.** "Work on <task-name>". Results land in the project's `outputs/`.
 5. **Close it.**
    `/daily-work:record <task-name>`, or just `/daily-work:record` if it is your only open task.
-   Claude writes what was done and what to watch out for, commits, and lists the checks
-   left for you.
+   Claude shows what was done and what to watch out for and asks "Record this?". Answer
+   yes; it writes it down, commits, and lists the checks left for you.
 
 With several tasks open, `/daily-work:record` with no argument lists them.
 

@@ -185,7 +185,12 @@ class Packaging(unittest.TestCase):
             text = skill.read_text()
             self.assertNotIn("CLAUDE_PLUGIN_ROOT", text, skill)
             self.assertIn("<plugin>/scripts/", text, skill)
-            self.assertIn("two levels above", text, skill)
+            self.assertIn(f"this file is `<plugin>/skills/{skill.parent.name}/SKILL.md`", text, skill)
+
+    def test_skills_load_in_copilot(self):
+        # Copilot CLI skips a skill with disable-model-invocation, even when typed as a command.
+        for skill in (REPO / "skills").glob("*/SKILL.md"):
+            self.assertNotIn("disable-model-invocation", skill.read_text(), skill)
 
 
 class Migration(unittest.TestCase):

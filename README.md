@@ -64,23 +64,26 @@ To try a local checkout of daily-work instead of installing it:
 
 ## Other coding agents
 
-The same repo installs in GitHub Copilot CLI and OpenAI Codex. Neither has been run by the
-author yet; the install lines follow each tool's documentation.
+The same repo installs in GitHub Copilot CLI and OpenAI Codex. Copilot CLI 1.0.100 was run
+on 2026-10-20 through init, brief, grill, work and record. Codex 0.163.0 installs the
+plugin; its skills have not been run yet.
 
 | Agent | Install |
 | --- | --- |
 | Claude Code | `/plugin marketplace add ludvignion/daily-work`, then `/plugin install daily-work@daily-work` |
 | GitHub Copilot CLI | `copilot plugin marketplace add ludvignion/daily-work`, then `copilot plugin install daily-work@daily-work` |
-| OpenAI Codex | `codex plugin marketplace add ludvignion/daily-work`, then install daily-work from the Plugins Directory |
+| OpenAI Codex | `codex plugin marketplace add ludvignion/daily-work`, then `codex plugin add daily-work@daily-work` |
 
-Matt Pocock's skills, needed for the grilling step, install in any agent with
-`npx skills add mattpocock/skills`.
+Matt Pocock's skills, needed for the grilling step, install the same way from his
+marketplace: `copilot plugin marketplace add mattpocock/skills`, then
+`copilot plugin install mattpocock-skills@mattpocock` (Codex: `codex plugin marketplace add
+mattpocock/skills`, then `codex plugin add mattpocock-skills@mattpocock`).
 
 What differs outside Claude Code:
 
 | | Claude Code | Copilot CLI, Codex |
 | --- | --- | --- |
-| The four skills (init, brief, record, feedback) | yes, as `/daily-work:<skill>` | yes, under the tool's own way of naming a skill |
+| The four skills (init, brief, record, feedback) | yes, as `/daily-work:<skill>` | yes; Copilot CLI also as `/daily-work:<skill>` |
 | `AGENTS.md` in the work repo | read directly (Claude Code v2.1.277 or later); through `CLAUDE.md` if the repo has one | read directly |
 | Telemetry events for brief and record | yes | yes |
 | Telemetry event for a finished grilling | yes | no |
@@ -109,9 +112,9 @@ need.
    settled as the Spec.
 3. **Work.** Tell Claude "work on uns-mockup". Client files go in the project's
    `inputs/`; what the task produces, code included, goes in the project's `outputs/`.
-4. **Record.** `/daily-work:record uns-mockup` writes Result and
-   Caveats, marks the task done in the project README, commits, and lists the Done lines a
-   person still has to check.
+4. **Record.** `/daily-work:record uns-mockup` shows the Result and Caveats it drafted and
+   asks "Record this?". On yes it writes them, marks the task done in the project README,
+   commits, and lists the Done lines a person still has to check.
 
 You never have to type a path. `brief` prints the grill line to paste; after that the task
 name is enough (`/mattpocock-skills:grill-with-docs uns-mockup` works too), and
@@ -148,7 +151,7 @@ A project is any folder at the repo root that holds a `tasks/` folder.
 
 ## Skills
 
-All four are user-invoked only.
+All four run only when you ask for them by name.
 
 - **`/daily-work:init [dir]`** — creates `AGENTS.md`, `README.md`, `.gitignore`, `.env.example`,
   `pyproject.toml`, `.claude/settings.json` and `tools/`, and runs `git init` if the
@@ -168,8 +171,9 @@ All four are user-invoked only.
   `daily-work: record <task-name>`, and prints the Done lines left to check. The commit takes
   the task file, the project's `outputs/`, `README.md` and `sources.md`, the repo `README.md`
   and `tools/`. It refuses to commit if `## Ask` or `## Spec` changed. With no argument it
-  records the only open task, or lists the open tasks if there are several. It asks you
-  nothing.
+  records the only open task, or lists the open tasks if there are several. Before writing
+  anything it shows the Result, Caveats, new sources and README line it drafted and asks
+  "Record this?"; nothing is written or committed until you answer yes.
 - **`/daily-work:feedback <task-name> <comment>`** — sends the plugin author that task file
   (or its brief) and your comment. It prints exactly what will be sent and sends only after
   you answer yes. See [Telemetry](#telemetry).
