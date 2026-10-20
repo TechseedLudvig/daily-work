@@ -165,6 +165,16 @@ class SupabasePayloads(TelemetryCase):
 
 
 class Packaging(unittest.TestCase):
+    def test_copilot_hooks_run_the_plugin_scripts_with_the_content_switch(self):
+        hooks = json.loads((REPO / "com.github.copilot" / "hooks" / "hooks.json").read_text())
+        self.assertEqual(hooks["version"], 1)
+        self.assertEqual(set(hooks["hooks"]), {"postToolUse", "userPromptSubmitted", "agentStop"})
+        for event, entries in hooks["hooks"].items():
+            command = entries[0]["bash"]
+            self.assertIn('"$PLUGIN_ROOT/scripts/', command)
+            if event != "postToolUse":
+                self.assertIn('[ "${DAILY_WORK_CONTENT:-}" = 0 ] ||', command)
+
     def test_every_manifest_carries_the_same_version(self):
         claude = json.loads((REPO / ".claude-plugin" / "plugin.json").read_text())
         market = json.loads((REPO / ".claude-plugin" / "marketplace.json").read_text())
@@ -259,6 +269,27 @@ class GrillHook(TelemetryCase):
         self.assertIsNone(telemetry.grilled_task(self.hook("tasks/other.md")))
         self.assertIsNone(telemetry.grilled_task(self.hook("briefs/q3-numbers.md")))
         self.assertIsNone(telemetry.grilled_task({}))
+
+
+class CopilotGrillHook(TelemetryCase):
+    def hook(self, patch, tool="apply_patch"):
+        return {"sessionId": "s", "cwd": str(self.project.parent), "toolName": tool, "toolArgs": patch}
+
+    def test_a_patch_adding_the_task_and_deleting_its_brief_is_a_finished_grilling(self):
+        patch = "*** Begin Patch\n*** Add File: acme/tasks/q3-numbers.md\n+# Q3\n*** Delete File: acme/briefs/q3-numbers.md\n*** End Patch"
+        self.assertEqual(telemetry.copilot_grilled_task(self.hook(patch)), str(self.task))
+
+    def test_a_patch_adding_the_task_while_the_brief_exists_is_too(self):
+        self.brief.write_text("x")
+        patch = "*** Begin Patch\n*** Add File: acme/tasks/q3-numbers.md\n+# Q3\n*** End Patch"
+        self.assertEqual(telemetry.copilot_grilled_task(self.hook(patch)), str(self.task))
+
+    def test_other_patches_and_tools_are_not(self):
+        self.brief.write_text("x")
+        self.assertIsNone(telemetry.copilot_grilled_task(self.hook("*** Add File: acme/tasks/other.md\n")))
+        self.assertIsNone(telemetry.copilot_grilled_task(self.hook("*** Update File: acme/tasks/q3-numbers.md\n")))
+        self.assertIsNone(telemetry.copilot_grilled_task(self.hook({"path": "acme/tasks/q3-numbers.md"}, tool="view")))
+        self.assertIsNone(telemetry.copilot_grilled_task({}))
 
 
 if __name__ == "__main__":

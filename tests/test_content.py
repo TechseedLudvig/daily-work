@@ -304,6 +304,64 @@ class Runs(ContentCase):
             self.assertRegex(p["ts"], r"^\d{4}-\d\d-\d\dT\d\d:00:00Z$")
 
 
+class Copilot(ContentCase):
+    """Copilot CLI's hooks: camelCase fields, the event in the command line, no assistant replies."""
+    def setUp(self):
+        super().setUp()
+        self.accept_notice()
+
+    def copilot(self, event, **fields):
+        return self.run_main("hook", event, hook={"sessionId": SESSION, "timestamp": 1, "cwd": str(self.repo), **fields})
+
+    def test_a_grill_run_sends_what_the_person_typed(self):
+        self.brief.write_text("# Q3\n")
+        self.copilot("copilot-prompt", prompt="/mattpocock-skills:grill-with-docs acme/briefs/q3-numbers.md")
+        self.copilot("copilot-stop", transcriptPath="/x/events.jsonl", stopReason="end_turn")
+        self.copilot("copilot-prompt", prompt="1. fiscal Q3 2. net revenue")
+        self.assertEqual(self.sent, [])
+        self.task.write_text("# Q3\n")
+        self.copilot("copilot-stop", transcriptPath="/x/events.jsonl", stopReason="end_turn")
+        (table, p), = self.sent
+        self.assertEqual((table, p["skill"]), ("content", "grill"))
+        self.assertEqual([(t["role"], t["text"]) for t in p["turns"]], [
+            ("user", "/mattpocock-skills:grill-with-docs acme/briefs/q3-numbers.md"),
+            ("user", "1. fiscal Q3 2. net revenue")])
+        self.assertTrue(content.grilled(str(self.task)))
+
+    def test_a_brief_run_ends_when_brief_sh_names_its_task(self):
+        self.copilot("copilot-prompt", prompt="/daily-work:brief acme pull the Q3 numbers")
+        self.copilot("copilot-stop")
+        self.copilot("copilot-prompt", prompt="write it")
+        self.run_main("created", str(self.task))
+        self.copilot("copilot-stop")
+        (_, p), = self.sent
+        self.assertEqual((p["skill"], len(p["turns"])), ("brief", 2))
+
+    def test_the_transcript_is_never_read(self):
+        transcript = self.repo / "events.jsonl"
+        transcript.write_text('{"type": "assistant.message", "data": {"content": "SECRET REPLY"}}\n')
+        self.brief.write_text("# Q3\n")
+        self.copilot("copilot-prompt", prompt="/mattpocock-skills:grill-with-docs q3-numbers")
+        self.task.write_text("# Q3\n")
+        self.copilot("copilot-stop", transcriptPath=str(transcript))
+        (_, p), = self.sent
+        self.assertNotIn("SECRET REPLY", json.dumps(p))
+
+    def test_system_notifications_are_not_user_turns(self):
+        self.brief.write_text("# Q3\n")
+        self.copilot("copilot-prompt", prompt="/mattpocock-skills:grill-with-docs q3-numbers")
+        self.copilot("copilot-prompt", prompt='<system_notification>\nAgent "x" (explore) has finished\n</system_notification>')
+        self.task.write_text("# Q3\n")
+        self.copilot("copilot-stop")
+        (_, p), = self.sent
+        self.assertEqual(len(p["turns"]), 1)
+
+    def test_other_prompts_start_nothing(self):
+        self.copilot("copilot-prompt", prompt="work on q3-numbers")
+        self.copilot("copilot-stop")
+        self.assertEqual(self.sent, [])
+
+
 class Truncation(ContentCase):
     def setUp(self):
         super().setUp()

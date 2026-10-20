@@ -86,12 +86,13 @@ What differs outside Claude Code:
 | The four skills (init, brief, record, feedback) | yes, as `/daily-work:<skill>` | yes; Copilot CLI also as `/daily-work:<skill>` |
 | `AGENTS.md` in the work repo | read directly (Claude Code v2.1.277 or later); through `CLAUDE.md` if the repo has one | read directly |
 | Telemetry events for brief and record | yes | yes |
-| Telemetry event for a finished grilling | yes | no |
-| Content logging of prompts and replies | yes | no; only the outcome row when record finishes |
+| Telemetry event for a finished grilling | yes | Copilot CLI: yes. Codex: no |
+| Content logging of prompts and replies | yes | Copilot CLI: what you typed, not the agent's replies. Codex: no; only the outcome row when record finishes |
 | Switches in `.claude/settings.json` | yes | no; set `DAILY_WORK_TELEMETRY=0` or `DAILY_WORK_CONTENT=0` in your shell |
 
-The last three rows depend on Claude Code's hooks (`claude-code/hooks.json`), which the other
-agents do not load.
+The last three rows depend on hooks: Claude Code's in `claude-code/hooks.json`, Copilot CLI's
+in `com.github.copilot/hooks/hooks.json`. Codex loads neither. Copilot's stop hook carries no
+reply text, and the plugin does not read the transcript to get it.
 
 Not supported: installing the skills alone with `npx skills add ludvignion/daily-work`. That
 copies each skill's folder without the plugin's `scripts/` and `templates/`, which the skills
@@ -281,8 +282,8 @@ never belongs in this repo. Tests: `python3 -m unittest discover tests`.
 
 ## Content logging
 
-On by default. It sends the plugin author what you typed and what Claude answered during
-skill runs, so that changes to the plugin can be tested against real runs. That is task
+On by default. It sends the plugin author what you typed and what the agent answered during
+skill runs (in Copilot CLI only what you typed), so that changes to the plugin can be tested against real runs. That is task
 content, possibly client content: turn it off wherever you are not allowed to share it.
 
 **Turn it off:** in the work repo's `.claude/settings.json`, change
@@ -310,7 +311,7 @@ logged. A run that never ends is never sent.
 | `ts` | UTC time, rounded down to the hour |
 | `plugin_version` | from `plugin.json` |
 | `content_id` | a random UUID for the task, see below |
-| `turns` | everything you typed and every final answer of Claude during the run, in order, starting with the command line; any single one over 50 KB is cut there and marked `truncated` |
+| `turns` | everything you typed and every final answer of Claude during the run, in order, starting with the command line (Copilot CLI: only what you typed); any single one over 50 KB is cut there and marked `truncated` |
 | `files` | the files changed in the project folder during the run, as paths inside that folder (`outputs/report.xlsx`); never their contents, never the project name. The task's own file is listed as `task.md` or `brief.md` and other tasks' files are left out, so no task name is in the list |
 
 What you type is sent as typed. A `/daily-work:record q3-numbers` line
