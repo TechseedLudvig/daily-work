@@ -2,8 +2,9 @@
 # Set up a daily-work repo in the given directory (default: here). Never overwrites:
 # an existing AGENTS.md gets only the template's missing ## sections, an existing
 # .gitignore or CLAUDE.md only its missing lines. Prints one line per file.
-# AGENTS.md holds the instructions, for every coding agent; CLAUDE.md only imports it, for
-# Claude Code sessions that do not read AGENTS.md on their own.
+# AGENTS.md holds the instructions, for every coding agent. Claude Code reads it on its own
+# when there is no CLAUDE.md, so none is created; an existing CLAUDE.md gets the @AGENTS.md
+# import, because Claude Code then reads CLAUDE.md only.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 P="$TEMPLATES/repo"
@@ -36,17 +37,22 @@ append_lines() {
   echo "$n"
 }
 
-for f in AGENTS.md CLAUDE.md README.md .gitignore .env.example pyproject.toml .claude/settings.json; do
+for f in AGENTS.md README.md .gitignore .env.example pyproject.toml .claude/settings.json; do
   if [ ! -e "$f" ]; then
     mkdir -p "$(dirname "$f")"; cp "$P/$f" "$f"; echo "$f: copied"
   elif [ "$f" = AGENTS.md ] && n=$(append_sections "$P/$f" "$f") && [ "$n" -gt 0 ]; then
     echo "$f: appended $n missing sections"
-  elif { [ "$f" = .gitignore ] || [ "$f" = CLAUDE.md ]; } && n=$(append_lines "$P/$f" "$f") && [ "$n" -gt 0 ]; then
+  elif [ "$f" = .gitignore ] && n=$(append_lines "$P/$f" "$f") && [ "$n" -gt 0 ]; then
     echo "$f: appended $n missing lines"
   else
     echo "$f: skipped"
   fi
 done
+
+if [ -e CLAUDE.md ]; then
+  if n=$(append_lines "$P/CLAUDE.md" CLAUDE.md) && [ "$n" -gt 0 ]; then echo "CLAUDE.md: appended $n missing lines"
+  else echo "CLAUDE.md: skipped"; fi
+fi
 
 for f in tools/.gitkeep; do
   if [ -e "$f" ]; then echo "$f: skipped"; else mkdir -p "$(dirname "$f")" && : > "$f" && echo "$f: copied"; fi

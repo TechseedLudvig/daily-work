@@ -60,11 +60,27 @@ class Init(ScriptCase):
     def test_copies_every_file_and_makes_a_git_repo(self):
         code, out = self.run_script("init.sh")
         self.assertEqual(code, 0)
-        for f in ["AGENTS.md", "CLAUDE.md", "README.md", ".gitignore", ".env.example", "pyproject.toml",
+        for f in ["AGENTS.md", "README.md", ".gitignore", ".env.example", "pyproject.toml",
                   ".claude/settings.json", "tools/.gitkeep"]:
             self.assertTrue((self.dir / f).exists(), f)
             self.assertIn(f"{f}: copied", out)
         self.assertIn("git: initialized", out)
+
+    def test_creates_no_claude_md(self):
+        code, out = self.run_script("init.sh")
+        self.assertEqual(code, 0)
+        self.assertFalse((self.dir / "CLAUDE.md").exists())
+        self.assertNotIn("CLAUDE.md", out)
+
+    def test_existing_claude_md_keeps_its_text_and_imports_agents_md(self):
+        (self.dir / "CLAUDE.md").write_text("Mine.\n")
+        code, out = self.run_script("init.sh")
+        self.assertEqual(code, 0)
+        self.assertEqual(self.read("CLAUDE.md"), "Mine.\n@AGENTS.md\n")
+        self.assertIn("CLAUDE.md: appended 1 missing lines", out)
+        code, out = self.run_script("init.sh")
+        self.assertIn("CLAUDE.md: skipped", out)
+        self.assertEqual(self.read("CLAUDE.md"), "Mine.\n@AGENTS.md\n")
 
     def test_second_run_changes_nothing(self):
         self.run_script("init.sh")

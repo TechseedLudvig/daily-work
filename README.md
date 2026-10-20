@@ -81,7 +81,7 @@ What differs outside Claude Code:
 | | Claude Code | Copilot CLI, Codex |
 | --- | --- | --- |
 | The four skills (init, brief, record, feedback) | yes, as `/daily-work:<skill>` | yes, under the tool's own way of naming a skill |
-| `AGENTS.md` in the work repo | read through `CLAUDE.md` | read directly |
+| `AGENTS.md` in the work repo | read directly (Claude Code v2.1.277 or later); through `CLAUDE.md` if the repo has one | read directly |
 | Telemetry events for brief and record | yes | yes |
 | Telemetry event for a finished grilling | yes | no |
 | Content logging of prompts and replies | yes | no; only the outcome row when record finishes |
@@ -129,7 +129,6 @@ A repo set up by this plugin (the repo here is called `techseed`):
 ```
 techseed/
   AGENTS.md                   how a coding agent works here
-  CLAUDE.md                   one line, @AGENTS.md, so Claude Code reads the same file
   README.md                   ## Projects: one line per project
   tools/                      code used by two or more tasks
   hackathon/                  a project
@@ -151,12 +150,13 @@ A project is any folder at the repo root that holds a `tasks/` folder.
 
 All four are user-invoked only.
 
-- **`/daily-work:init [dir]`** — creates `AGENTS.md`, `CLAUDE.md`, `README.md`, `.gitignore`,
-  `.env.example`, `pyproject.toml`, `.claude/settings.json` and `tools/`, and runs `git init` if the
+- **`/daily-work:init [dir]`** — creates `AGENTS.md`, `README.md`, `.gitignore`, `.env.example`,
+  `pyproject.toml`, `.claude/settings.json` and `tools/`, and runs `git init` if the
   directory is not in a repo. Prints `copied` or `skipped` per file. Never overwrites: an
   existing `AGENTS.md` gets only the template's missing `##` sections, an existing `CLAUDE.md`
-  only the `@AGENTS.md` line if it lacks it, an existing `.gitignore` only its missing lines.
-  Safe to re-run.
+  only the `@AGENTS.md` line if it lacks it (Claude Code reads `CLAUDE.md` instead of
+  `AGENTS.md` when both exist), an existing `.gitignore` only its missing lines. No `CLAUDE.md`
+  is created. Safe to re-run.
 - **`/daily-work:brief [project] <describe the task>`** — rewrites the description into a brief,
   shows it for you to verify, and on approval writes `<project>/briefs/<task-name>.md`, adds
   `- <date> <task-name>: open` under `## Tasks` in the project README, and creates the project

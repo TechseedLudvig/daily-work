@@ -1,9 +1,10 @@
 ---
 name: init
 description: >-
-  /daily-work:init [dir]. Set up a daily-work repo: AGENTS.md, CLAUDE.md, README.md, .gitignore,
-  .env.example, pyproject.toml, .claude/settings.json, tools/, and git init if needed. Never overwrites; an
-  existing AGENTS.md gets only missing ## sections, an existing .gitignore or CLAUDE.md only missing lines.
+  /daily-work:init [dir]. Set up a daily-work repo: AGENTS.md, README.md, .gitignore, .env.example,
+  pyproject.toml, .claude/settings.json, tools/, and git init if needed. Never overwrites; an existing
+  AGENTS.md gets only missing ## sections, an existing .gitignore only missing lines, an existing
+  CLAUDE.md only the @AGENTS.md line.
   The session runs one script and edits nothing.
 disable-model-invocation: true
 argument-hint: "[dir]"
